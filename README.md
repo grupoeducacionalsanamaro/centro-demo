@@ -56,7 +56,7 @@ Escribe el número con el formato `+56 9 XXXX XXXX`: el sitio quita los espacios
 El cambio se aplica al botón flotante, a «Escríbenos por WhatsApp», a la confirmación de reserva y a la base de conocimiento.
 Después ejecuta `npm run base` (o `npm run build`) para regenerar `docs/base-conocimiento-whatsapp.md`.
 
-Si publicas el sitio en otro dominio, actualiza también `centro.sitioUrl` (se usa en Open Graph, el sitemap y los enlaces de la base de conocimiento).
+Si publicas el sitio en otro dominio, actualiza también `centro.sitioUrl` (hoy `https://centro-demo-weld.vercel.app`) (se usa en Open Graph, el sitemap y los enlaces de la base de conocimiento).
 
 ## Agregar un artículo de Educación
 
@@ -86,7 +86,7 @@ El proyecto no necesita configuración adicional:
 1. Sube la carpeta a un repositorio de GitHub (la carpeta `img-originales/` está excluida en `.gitignore`).
 2. En Vercel, elige **Add New → Project** e importa el repositorio. Vercel detecta Astro automáticamente
    (comando `npm run build`, carpeta de salida `dist`).
-3. Cuando tengas la URL definitiva, actualiza `centro.sitioUrl` en el JSON y vuelve a desplegar.
+3. Cuando tengas la URL definitiva, actualiza `centro.sitioUrl` (hoy `https://centro-demo-weld.vercel.app`) en el JSON y vuelve a desplegar.
 
 También puedes desplegar desde la terminal con `npx vercel` (vista previa) o `npx vercel --prod` (producción).
 

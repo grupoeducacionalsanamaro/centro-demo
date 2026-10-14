@@ -3,7 +3,7 @@
     "nombre": "Centro Demo — Salud Integral",
     "nombreCorto": "Centro Demo",
     "eslogan": "Atención cercana, en un solo lugar.",
-    "sitioUrl": "https://centro-demo.vercel.app",
+    "sitioUrl": "https://centro-demo-weld.vercel.app",
     "direccion": {
       "calle": "Av. Ejemplo 1234, oficina 501",
       "comuna": "Providencia",

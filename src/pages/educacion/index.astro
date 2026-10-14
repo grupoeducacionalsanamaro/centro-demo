@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import EncabezadoPagina from '../../components/EncabezadoPagina.astro';
+import TarjetaArticulo from '../../components/TarjetaArticulo.astro';
+import { C } from '../../lib/datos.js';
+import { obtenerArticulos } from '../../lib/articulos';
+
+const articulos = await obtenerArticulos();
+// Solo se muestran como filtro las especialidades que tienen artículos.
+const conArticulos = C.especialidades.filter((e) => articulos.some((a) => a.data.especialidad === e.slug));
+---
+<Base titulo="Educación" descripcion="Artículos educativos de Centro Demo (ficticio) sobre kinesiología, nutrición, odontología y más. Contenido general que no reemplaza una evaluación profesional.">
+  <EncabezadoPagina
+    titulo="Educación"
+    bajada="Consejos prácticos escritos por nuestro equipo para cuidar tu salud en el día a día."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="filtros" role="group" aria-label="Filtrar artículos por especialidad" data-filtro-grupo data-items=".grilla-articulos [data-especialidad]" data-estado="estado-articulos">
+        <button type="button" class="chip" data-filtro="todas" aria-pressed="true">Todas</button>
+        {conArticulos.map((e) => (
+          <button type="button" class="chip" data-filtro={e.slug} aria-pressed="false">{e.nombre}</button>
+        ))}
+      </div>
+      <p id="estado-articulos" class="visualmente-oculto" aria-live="polite"></p>
+      <ul class="lista-grilla grilla grilla--3 grilla-articulos">
+        {articulos.map((a) => <li><TarjetaArticulo a={a} nivelTitulo="h2" /></li>)}
+      </ul>
+      <p class="nota" style="margin-top: 28px">El contenido de esta sección es educativo y no reemplaza una evaluación profesional.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { iniciarFiltro } from '../../scripts/filtro';
+  document.querySelectorAll<HTMLElement>('[data-filtro-grupo]').forEach(iniciarFiltro);
+</script>
+
+<style>
+  .grilla-articulos li { display: flex; }
+  .grilla-articulos li > :global(*) { flex: 1; }
+</style>

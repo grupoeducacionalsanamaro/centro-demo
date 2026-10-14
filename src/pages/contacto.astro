@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import AvisoUrgencia from '../components/AvisoUrgencia.astro';
+import Ubicacion from '../components/Ubicacion.astro';
+import Icono from '../components/Icono.astro';
+import { C } from '../lib/datos.js';
+---
+<Base titulo="Contacto" descripcion="Datos de contacto (de ejemplo), horarios y ubicación de Centro Demo, un centro de salud ficticio. Escríbenos por WhatsApp o déjanos un mensaje.">
+  <EncabezadoPagina
+    titulo="Contacto"
+    bajada="Estamos para ayudarte con tus reservas y consultas administrativas."
+    imagen="contacto"
+    imagenAlt="Ilustración de la fachada del centro con íconos de teléfono, correo y ubicación."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <AvisoUrgencia class="contacto-urgencia" />
+
+      <div class="contacto">
+        <div>
+          <h2>Canales de contacto</h2>
+          <ul class="canales">
+            <li class="tarjeta">
+              <span class="canales__icono"><Icono nombre="whatsapp" /></span>
+              <div>
+                <strong>WhatsApp</strong>
+                <a href={C.waLink(C.mensajeWhatsapp)} target="_blank" rel="noopener">{C.centro.whatsapp}</a>
+                <span>Reservas, confirmaciones y consultas administrativas.</span>
+              </div>
+            </li>
+            <li class="tarjeta">
+              <span class="canales__icono"><Icono nombre="telefono" /></span>
+              <div><strong>Teléfono</strong><a href={C.telLink}>{C.centro.telefono}</a><span>En horario de atención.</span></div>
+            </li>
+            <li class="tarjeta">
+              <span class="canales__icono"><Icono nombre="correo" /></span>
+              <div><strong>Correo</strong><a href={`mailto:${C.centro.correo}`}>{C.centro.correo}</a><span>Respondemos en un plazo de un día hábil.</span></div>
+            </li>
+          </ul>
+          <p class="nota">{C.centro.notaContacto}: el número y el correo no pertenecen a un centro real.</p>
+        </div>
+
+        <div class="tarjeta formulario">
+          <h2>Déjanos un mensaje</h2>
+          <div class="aviso aviso--info formulario__aviso">
+            <Icono nombre="info" />
+            <p>Esta es una demostración: el formulario no envía datos a ningún servidor. Por favor, no incluyas información de salud.</p>
+          </div>
+          <form id="form-contacto" novalidate>
+            <div class="campo">
+              <label for="c-nombre">Nombre</label>
+              <input id="c-nombre" name="nombre" class="entrada" type="text" autocomplete="name" required aria-describedby="c-nombre-error" />
+              <span class="error" id="c-nombre-error" hidden>Escribe tu nombre.</span>
+            </div>
+            <div class="campo">
+              <label for="c-correo">Correo electrónico</label>
+              <input id="c-correo" name="correo" class="entrada" type="email" autocomplete="email" required aria-describedby="c-correo-error" />
+              <span class="error" id="c-correo-error" hidden>Escribe un correo válido, por ejemplo nombre@correo.cl.</span>
+            </div>
+            <div class="campo">
+              <label for="c-mensaje">Mensaje</label>
+              <span class="ayuda" id="c-mensaje-ayuda">Solo consultas generales (horarios, reservas, valores). No escribas síntomas ni datos de salud.</span>
+              <textarea id="c-mensaje" name="mensaje" class="entrada" required maxlength="600" aria-describedby="c-mensaje-ayuda c-mensaje-error"></textarea>
+              <span class="error" id="c-mensaje-error" hidden>Escribe tu mensaje.</span>
+            </div>
+            <button type="submit" class="boton boton--primario"><Icono nombre="enviar" tamano={20} /> Enviar mensaje</button>
+          </form>
+          <div id="contacto-ok" class="formulario__ok" hidden tabindex="-1">
+            <Icono nombre="check" tamano={32} />
+            <h3>¡Mensaje recibido! (demostración)</h3>
+            <p>En un centro real, te responderíamos en un plazo de un día hábil. Como este sitio es ficticio, tu mensaje no se envió ni se guardó en ningún lugar.</p>
+            <button type="button" class="boton boton--secundario boton--chico" id="contacto-otro">Escribir otro mensaje</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--alterna" aria-label="Ubicación y horarios">
+    <div class="contenedor">
+      <Ubicacion urgencia={false} />
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Formulario de demostración: valida en el navegador y no envía nada.
+  const form = document.getElementById('form-contacto') as HTMLFormElement;
+  const ok = document.getElementById('contacto-ok')!;
+  const campos = ['c-nombre', 'c-correo', 'c-mensaje'].map((id) => document.getElementById(id) as HTMLInputElement);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let primero: HTMLInputElement | null = null;
+    for (const c of campos) {
+      const valido = c.value.trim() !== '' && c.checkValidity();
+      c.setAttribute('aria-invalid', String(!valido));
+      document.getElementById(`${c.id}-error`)!.hidden = valido;
+      if (!valido && !primero) primero = c;
+    }
+    if (primero) return primero.focus();
+    form.reset();
+    form.hidden = true;
+    ok.hidden = false;
+    ok.focus();
+  });
+  document.getElementById('contacto-otro')!.addEventListener('click', () => {
+    ok.hidden = true;
+    form.hidden = false;
+    campos[0].focus();
+  });
+</script>
+
+<style>
+  :global(.contacto-urgencia) { margin-bottom: 40px; }
+  .contacto { display: grid; gap: 40px; }
+  @media (min-width: 960px) { .contacto { grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; } }
+  .canales { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 12px; }
+  .canales li { display: flex; gap: 16px; padding: 18px 20px; }
+  .canales div { display: grid; }
+  .canales strong { font-family: var(--fuente-titulos); }
+  .canales a { font-weight: 600; font-size: 1.05rem; }
+  .canales span:not(.canales__icono) { color: var(--gris); font-size: 0.9rem; }
+  .canales__icono { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--verde-claro); color: var(--verde); }
+  .formulario { padding: 28px; }
+  .formulario h2 { font-size: 1.5rem; }
+  .formulario__aviso { margin-bottom: 20px; font-size: 0.9rem; }
+  .formulario__ok { text-align: center; padding: 24px 8px; }
+  .formulario__ok :global(.icono) { margin: 0 auto 12px; color: #fff; background: var(--verde); border-radius: 50%; padding: 6px; width: 48px; height: 48px; }
+  .formulario__ok p { color: var(--gris); }
+</style>

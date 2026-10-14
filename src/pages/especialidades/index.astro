@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import EncabezadoPagina from '../../components/EncabezadoPagina.astro';
+import TarjetaEspecialidad from '../../components/TarjetaEspecialidad.astro';
+import Icono from '../../components/Icono.astro';
+import { C } from '../../lib/datos.js';
+---
+<Base titulo="Especialidades" descripcion="Medicina general, kinesiología, odontología, nutrición, psicología y enfermería en Centro Demo (sitio ficticio). Conoce qué atendemos, duración y valores referenciales.">
+  <EncabezadoPagina
+    titulo="Especialidades"
+    bajada={`${C.especialidades.length} especialidades coordinadas en un mismo lugar para acompañarte en cada etapa.`}
+  />
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="grilla grilla--3">
+        {C.especialidades.map((e) => <TarjetaEspecialidad e={e} conValor />)}
+      </div>
+      <p class="nota" style="margin-top: 24px">{C.centro.notaValores}</p>
+      <div class="seccion__pie">
+        <a href="/agendar" class="boton boton--primario"><Icono nombre="calendario-check" tamano={20} /> Agendar hora</a>
+        <a href="/valores" class="boton boton--secundario">Ver tabla de valores</a>
+      </div>
+    </div>
+  </section>
+</Base>

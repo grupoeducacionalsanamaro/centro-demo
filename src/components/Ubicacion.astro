@@ -1,0 +1,69 @@
+---
+import Icono from './Icono.astro';
+import AvisoUrgencia from './AvisoUrgencia.astro';
+import { C } from '../lib/datos.js';
+interface Props { titulo?: boolean; urgencia?: boolean }
+const { titulo = true, urgencia = true } = Astro.props;
+---
+<div class="ubicacion">
+  <figure class="ubicacion__mapa">
+    <img
+      src="/images/mapa-ilustrado.webp"
+      srcset="/images/mapa-ilustrado-640.webp 640w, /images/mapa-ilustrado.webp 1168w"
+      sizes="(min-width: 960px) 560px, 100vw"
+      width="1168" height="880" loading="lazy" decoding="async"
+      alt="Mapa ilustrado y ficticio de un barrio con un marcador en la ubicación del centro."
+    />
+    <figcaption>Mapa ilustrativo. La dirección es ficticia.</figcaption>
+  </figure>
+
+  <div class="ubicacion__datos">
+    {titulo && (
+      <>
+        <span class="antetitulo">Ubicación y horarios</span>
+        <h2>Te esperamos en Providencia</h2>
+      </>
+    )}
+    <ul class="ubicacion__lista">
+      <li>
+        <Icono nombre="ubicacion" />
+        <div><strong>Dirección</strong><span>{C.direccionCompleta} ({C.centro.direccion.nota.toLowerCase()})</span></div>
+      </li>
+      <li>
+        <Icono nombre="reloj" />
+        <div>
+          <strong>Horario de atención</strong>
+          <dl>
+            {C.horarioResumen.map((h) => (<div><dt>{h.dias}</dt><dd>{h.horas}</dd></div>))}
+          </dl>
+        </div>
+      </li>
+      <li>
+        <Icono nombre="auto" />
+        <div><strong>Estacionamiento</strong><span>{C.centro.estacionamiento}</span></div>
+      </li>
+      <li>
+        <Icono nombre="accesible" />
+        <div><strong>Accesibilidad</strong><span>{C.centro.accesibilidad}</span></div>
+      </li>
+    </ul>
+    {urgencia && <AvisoUrgencia />}
+  </div>
+</div>
+
+<style>
+  .ubicacion { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 960px) { .ubicacion { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .ubicacion__mapa { margin: 0; }
+  .ubicacion__mapa img { border-radius: var(--radio); box-shadow: var(--sombra); width: 100%; }
+  figcaption { font-size: 0.85rem; color: var(--gris); margin-top: 8px; }
+  .ubicacion__lista { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 18px; }
+  .ubicacion__lista li { display: flex; gap: 14px; }
+  .ubicacion__lista :global(.icono) { flex: none; color: var(--verde); margin-top: 2px; }
+  .ubicacion__lista strong { display: block; font-family: var(--fuente-titulos); }
+  .ubicacion__lista span { color: var(--gris); }
+  dl { margin: 4px 0 0; display: grid; gap: 2px; }
+  dl div { display: flex; gap: 8px; flex-wrap: wrap; }
+  dt { color: var(--tinta); font-weight: 500; min-width: 150px; }
+  dd { margin: 0; color: var(--gris); }
+</style>

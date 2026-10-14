@@ -1,0 +1,23 @@
+---
+// Isotipo (cruz redondeada de cuatro círculos dentro de un círculo) + texto «Centro Demo».
+interface Props {
+  claro?: boolean; // versión para fondos oscuros
+  tamano?: number;
+}
+const { claro = false, tamano = 40 } = Astro.props;
+---
+<span class:list={['logo', { 'logo--claro': claro }]}>
+  <svg width={tamano} height={tamano} viewBox="0 0 80 80" aria-hidden="true" focusable="false">
+    <circle cx="40" cy="40" r="40" fill={claro ? '#E6F2EF' : '#2F7D6D'} />
+    <g fill={claro ? '#2F7D6D' : '#E6F2EF'}>
+      <circle cx="40" cy="23" r="12.5" />
+      <circle cx="40" cy="57" r="12.5" />
+      <circle cx="23" cy="40" r="12.5" />
+      <circle cx="57" cy="40" r="12.5" />
+    </g>
+  </svg>
+  <span class="logo__texto">
+    <span class="logo__nombre">Centro Demo</span>
+    <span class="logo__bajada">Salud Integral</span>
+  </span>
+</span>

@@ -1,0 +1,107 @@
+---
+import Base from '../../layouts/Base.astro';
+import EncabezadoPagina from '../../components/EncabezadoPagina.astro';
+import TarjetaProfesional from '../../components/TarjetaProfesional.astro';
+import Icono from '../../components/Icono.astro';
+import { C } from '../../lib/datos.js';
+
+export function getStaticPaths() {
+  return C.especialidades.map((e) => ({ params: { slug: e.slug }, props: { e } }));
+}
+const { e } = Astro.props;
+const otras = C.especialidades.filter((x) => x.slug !== e.slug);
+---
+<Base titulo={e.nombre} descripcion={`${e.nombre} en Centro Demo (ficticio): ${e.descripcionBreve} Duración ${e.duracion} minutos. Valor referencial ${e.valorTexto}.`}>
+  <EncabezadoPagina
+    titulo={e.nombre}
+    bajada={e.descripcion}
+    migas={[{ texto: 'Especialidades', href: '/especialidades' }]}
+  >
+    <div class="esp-acciones">
+      <a href={`/agendar?especialidad=${e.slug}`} class="boton boton--primario"><Icono nombre="calendario-check" tamano={20} /> Agendar {e.nombre.toLowerCase()}</a>
+    </div>
+  </EncabezadoPagina>
+
+  <section class="seccion">
+    <div class="contenedor esp">
+      <div class="esp__principal">
+        <img
+          class="esp__imagen"
+          src={`/images/${e.imagen}.webp`}
+          srcset={`/images/${e.imagen}-640.webp 640w, /images/${e.imagen}.webp 1168w`}
+          sizes="(min-width: 960px) 700px, 100vw"
+          width="1168" height="880"
+          alt={`Ilustración de ${e.nombre.toLowerCase()}`}
+        />
+        <h2>¿Qué atendemos?</h2>
+        <ul class="esp__lista">
+          {e.queAtiende.map((q) => <li><Icono nombre="check" tamano={20} /> {q}</li>)}
+        </ul>
+        <h2>¿Cómo es la primera consulta?</h2>
+        <p>{e.primeraConsulta}</p>
+      </div>
+
+      <aside class="esp__lateral">
+        <div class="tarjeta esp__ficha">
+          <h2 class="esp__ficha-titulo">Resumen</h2>
+          <dl>
+            <div><dt><Icono nombre="reloj" tamano={20} /> Duración</dt><dd>{e.duracion} minutos</dd></div>
+            <div><dt><Icono nombre="billetera" tamano={20} /> Valor referencial</dt><dd>{e.valorTexto} <span>({e.valorNota})</span></dd></div>
+            <div><dt><Icono nombre="calendario" tamano={20} /> Días de atención</dt><dd>{e.profesionales.map((p) => p.diasTexto).join(' · ')}</dd></div>
+          </dl>
+          <p class="nota">{C.centro.notaValores}</p>
+          <a href={`/agendar?especialidad=${e.slug}`} class="boton boton--primario esp__boton">Agendar</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="seccion seccion--alterna" aria-labelledby="prof-titulo">
+    <div class="contenedor">
+      <div class="seccion__cabecera">
+        <h2 id="prof-titulo">{e.profesionales.length === 1 ? 'Profesional que la atiende' : 'Profesionales que la atienden'}</h2>
+      </div>
+      <div class="grilla grilla--3">
+        {e.profesionales.map((p) => <TarjetaProfesional p={p} completo />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="otras-titulo">
+    <div class="contenedor">
+      <h2 id="otras-titulo">Otras especialidades</h2>
+      <ul class="otras">
+        {otras.map((o) => (
+          <li><a href={`/especialidades/${o.slug}`}><Icono nombre={o.icono} /> {o.nombre}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .esp-acciones { margin-top: 24px; }
+  .esp { display: grid; gap: 40px; }
+  @media (min-width: 960px) { .esp { grid-template-columns: 1fr 360px; gap: 56px; align-items: start; } }
+  .esp__imagen { border-radius: var(--radio); width: 100%; margin-bottom: 36px; }
+  .esp__lista { list-style: none; padding: 0; margin: 0 0 36px; display: grid; gap: 12px; }
+  .esp__lista li { display: flex; gap: 12px; align-items: flex-start; }
+  .esp__lista :global(.icono) { color: var(--verde); flex: none; margin-top: 2px; }
+  .esp__lateral { position: sticky; top: calc(var(--alto-cabecera) + 24px); }
+  .esp__ficha { padding: 24px; }
+  .esp__ficha-titulo { font-size: 1.2rem; }
+  dl { margin: 0 0 16px; display: grid; gap: 16px; }
+  dt { display: flex; gap: 8px; align-items: center; font-size: 0.9rem; color: var(--gris); }
+  dt :global(.icono) { color: var(--verde); }
+  dd { margin: 4px 0 0 28px; font-weight: 700; font-family: var(--fuente-titulos); font-size: 1.1rem; }
+  dd span { font-weight: 500; color: var(--gris); font-size: 0.9rem; font-family: var(--fuente-texto); }
+  .esp__boton { width: 100%; }
+  .otras { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+  .otras a {
+    display: inline-flex; gap: 10px; align-items: center; padding: 12px 18px; border-radius: 999px;
+    background: var(--blanco); box-shadow: var(--sombra); text-decoration: none; color: var(--tinta); font-weight: 600;
+    transition: background-color 0.15s ease;
+  }
+  .otras a:hover { background: var(--verde-claro); }
+  .otras :global(.icono) { color: var(--verde); }
+</style>

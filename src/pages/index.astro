@@ -1,0 +1,251 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from '../components/Icono.astro';
+import TarjetaEspecialidad from '../components/TarjetaEspecialidad.astro';
+import TarjetaProfesional from '../components/TarjetaProfesional.astro';
+import TarjetaArticulo from '../components/TarjetaArticulo.astro';
+import ListaPreguntas from '../components/ListaPreguntas.astro';
+import Ubicacion from '../components/Ubicacion.astro';
+import { C } from '../lib/datos.js';
+import { obtenerArticulos } from '../lib/articulos';
+import { unirLista } from '../lib/centro.js';
+
+const articulos = (await obtenerArticulos()).slice(0, 3);
+const nombresEsp = C.especialidades.map((e) => e.nombre.toLowerCase());
+const confianza = [
+  { icono: 'personas', titulo: `${C.especialidades.length} especialidades`, texto: 'Un equipo multidisciplinario en un solo lugar.' },
+  { icono: 'calendario', titulo: `Atención de ${C.diasAtencionTexto}`, texto: C.horarioResumen.slice(0, -1).map((h) => `${h.dias}: ${h.horas}`).join(' · ') },
+  { icono: 'reloj', titulo: 'Reserva en línea las 24 horas', texto: 'Elige día y hora cuando te acomode.' },
+];
+const pasos = [
+  { n: 1, titulo: 'Elige la especialidad', texto: 'Y, si quieres, el profesional que prefieras.' },
+  { n: 2, titulo: 'Elige día y hora', texto: 'Ves la disponibilidad real de los próximos 14 días.' },
+  { n: 3, titulo: 'Confirma por WhatsApp', texto: 'Recibes un código y lo confirmas con un mensaje.' },
+];
+---
+<Base
+  titulo="Inicio"
+  descripcion={`${C.centro.nombre}: ${unirLista(nombresEsp)} en un solo lugar, en Providencia. Agenda tu hora en línea. Sitio ficticio de demostración.`}
+>
+  <link slot="head" rel="preload" as="image" href="/images/hero-recepcion-foto.webp" media="(min-width: 768px)" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" href="/images/hero-recepcion-vertical.webp" media="(max-width: 767px)" fetchpriority="high" />
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-titulo">
+    <picture class="hero__fondo">
+      <source media="(max-width: 767px)" srcset="/images/hero-recepcion-vertical.webp" width="752" height="1344" />
+      <img src="/images/hero-recepcion-foto.webp" width="1344" height="752" alt="" fetchpriority="high" />
+    </picture>
+    <div class="contenedor hero__contenido">
+      <span class="antetitulo">{C.centro.nombre}</span>
+      <h1 id="hero-titulo">Tu salud, con atención cercana y en un solo lugar</h1>
+      <p class="hero__bajada">
+        {unirLista(nombresEsp).replace(/^./, (l) => l.toUpperCase())}: un equipo que se coordina para cuidarte.
+      </p>
+      <div class="hero__botones">
+        <a href="/agendar" class="boton boton--primario"><Icono nombre="calendario-check" tamano={20} /> Agendar hora</a>
+        <a href={C.waLink(C.mensajeWhatsapp)} class="boton boton--secundario" target="_blank" rel="noopener">
+          <Icono nombre="whatsapp" tamano={20} /> Escríbenos por WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Franja de confianza -->
+  <div class="contenedor confianza-envoltura">
+    <ul class="tarjeta confianza" aria-label="Por qué elegirnos">
+      {confianza.map((c) => (
+        <li>
+          <span class="confianza__icono"><Icono nombre={c.icono} /></span>
+          <div><strong>{c.titulo}</strong><span>{c.texto}</span></div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Especialidades -->
+  <section class="seccion" aria-labelledby="esp-titulo">
+    <div class="contenedor">
+      <div class="seccion__cabecera">
+        <span class="antetitulo">Especialidades</span>
+        <h2 id="esp-titulo">Todo lo que necesitas, coordinado en un mismo lugar</h2>
+        <p>Profesionales de distintas áreas que trabajan en equipo para acompañarte.</p>
+      </div>
+      <div class="grilla grilla--3">
+        {C.especialidades.map((e) => <TarjetaEspecialidad e={e} />)}
+      </div>
+      <div class="seccion__pie">
+        <a href="/especialidades" class="enlace-flecha">Ver todas las especialidades <Icono nombre="flecha" tamano={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo agendar -->
+  <section class="seccion seccion--alterna" aria-labelledby="pasos-titulo">
+    <div class="contenedor pasos">
+      <div>
+        <span class="antetitulo">Cómo agendar</span>
+        <h2 id="pasos-titulo">Agenda tu hora en 3 pasos</h2>
+        <ol class="pasos__lista">
+          {pasos.map((p) => (
+            <li>
+              <span class="pasos__numero" aria-hidden="true">{p.n}</span>
+              <div><h3>{p.titulo}</h3><p>{p.texto}</p></div>
+            </li>
+          ))}
+        </ol>
+        <a href="/agendar" class="boton boton--primario"><Icono nombre="calendario-check" tamano={20} /> Agendar hora</a>
+      </div>
+      <img
+        class="pasos__imagen"
+        src="/images/agendar-online.webp"
+        srcset="/images/agendar-online-640.webp 640w, /images/agendar-online.webp 1344w"
+        sizes="(min-width: 960px) 560px, 100vw"
+        width="1344" height="752" loading="lazy" decoding="async"
+        alt="Ilustración de una persona eligiendo una hora en un calendario desde su celular."
+      />
+    </div>
+  </section>
+
+  <!-- WhatsApp -->
+  <section class="seccion" aria-labelledby="wa-titulo">
+    <div class="contenedor">
+      <div class="tarjeta wa-banner">
+        <img
+          src="/images/asistente-whatsapp-640.webp"
+          width="640" height="358" loading="lazy" decoding="async"
+          alt="Ilustración de una mano con un celular conversando por chat con la recepción del centro."
+        />
+        <div class="wa-banner__texto">
+          <span class="antetitulo">Atendemos por WhatsApp</span>
+          <h2 id="wa-titulo">Resuelve tus dudas sin llamar</h2>
+          <p>
+            Escríbenos para consultar horarios, valores, ubicación o para confirmar y reprogramar tu hora.
+            Las consultas clínicas siempre las responde una persona de nuestro equipo.
+          </p>
+          <p class="nota"><Icono nombre="alerta" tamano={16} class="nota__icono" /> Nuestro WhatsApp no atiende urgencias.</p>
+          <a href={C.waLink(C.mensajeWhatsapp)} class="boton boton--primario" target="_blank" rel="noopener">
+            <Icono nombre="whatsapp" tamano={20} /> Escríbenos al {C.centro.whatsapp}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipo -->
+  <section class="seccion seccion--blanca" aria-labelledby="equipo-titulo">
+    <div class="contenedor">
+      <div class="seccion__cabecera seccion__cabecera--centro">
+        <span class="antetitulo">Nuestro equipo</span>
+        <h2 id="equipo-titulo">Profesionales que te conocen por tu nombre</h2>
+        <p>Seis profesionales de distintas especialidades, con una misma forma de atender: cercana y sin apuro.</p>
+      </div>
+      <div class="grilla grilla--equipo">
+        {C.equipo.map((p) => <TarjetaProfesional p={p} />)}
+      </div>
+      <div class="seccion__pie seccion__pie--centro">
+        <a href="/equipo" class="enlace-flecha">Conoce al equipo completo <Icono nombre="flecha" tamano={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Educación -->
+  <section class="seccion" aria-labelledby="edu-titulo">
+    <div class="contenedor">
+      <div class="seccion__cabecera">
+        <span class="antetitulo">Educación</span>
+        <h2 id="edu-titulo">Consejos para cuidarte día a día</h2>
+        <p>Contenido educativo escrito por nuestro equipo.</p>
+      </div>
+      <div class="grilla grilla--3">
+        {articulos.map((a) => <TarjetaArticulo a={a} />)}
+      </div>
+      <div class="seccion__pie">
+        <a href="/educacion" class="enlace-flecha">Ver todos los artículos <Icono nombre="flecha" tamano={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <section class="seccion seccion--alterna" aria-labelledby="faq-titulo">
+    <div class="contenedor contenedor--angosto">
+      <div class="seccion__cabecera seccion__cabecera--centro">
+        <span class="antetitulo">Preguntas frecuentes</span>
+        <h2 id="faq-titulo">Resolvemos tus dudas</h2>
+      </div>
+      <ListaPreguntas cantidad={5} />
+      <div class="seccion__pie seccion__pie--centro">
+        <a href="/preguntas-frecuentes" class="boton boton--secundario">Ver todas las preguntas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ubicación -->
+  <section class="seccion" aria-label="Ubicación y horarios">
+    <div class="contenedor">
+      <Ubicacion />
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero: en móvil la foto va arriba y el texto debajo; desde 768 px el texto va sobre la foto. */
+  .hero { position: relative; overflow: hidden; background: var(--crema); }
+  .hero__fondo img { width: 100%; height: 300px; object-fit: cover; object-position: center 35%; }
+  .hero::after {
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 300px; pointer-events: none;
+    background: linear-gradient(to top, var(--crema) 0%, rgb(248 246 241 / 0) 40%);
+  }
+  .hero__contenido { position: relative; z-index: 1; margin-top: -24px; padding-bottom: 96px; }
+  .hero h1 { max-width: 640px; }
+  .hero__bajada { font-size: 1.1rem; color: var(--tinta); max-width: 560px; margin-bottom: 28px; }
+  .hero__botones { display: flex; flex-wrap: wrap; gap: 12px; }
+  @media (max-width: 479px) { .hero__botones .boton { width: 100%; } }
+  @media (min-width: 768px) {
+    .hero { display: flex; align-items: center; min-height: 600px; }
+    .hero__fondo img { position: absolute; inset: 0; height: 100%; object-position: right center; }
+    .hero::after { height: auto; inset: 0; background: linear-gradient(to right, var(--crema) 0%, rgb(248 246 241 / 0.92) 38%, rgb(248 246 241 / 0) 66%); }
+    .hero__contenido { margin-top: 0; padding-block: 72px 128px; }
+    .hero__bajada { font-size: 1.2rem; }
+  }
+
+  /* Confianza */
+  .confianza-envoltura { position: relative; z-index: 2; margin-top: -64px; }
+  .confianza { list-style: none; margin: 0; padding: 8px 20px; display: grid; }
+  .confianza li { display: flex; gap: 14px; align-items: center; padding: 16px 0; }
+  .confianza li + li { border-top: 1px solid var(--borde); }
+  .confianza strong { display: block; font-family: var(--fuente-titulos); font-size: 1.05rem; }
+  .confianza span:not(.confianza__icono) { color: var(--gris); font-size: 0.9rem; }
+  .confianza__icono { flex: none; width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--verde-claro); color: var(--verde); }
+  @media (min-width: 900px) {
+    .confianza { grid-template-columns: repeat(3, 1fr); padding: 12px 28px; }
+    .confianza li { padding: 20px 24px; }
+    .confianza li:first-child { padding-left: 0; }
+    .confianza li + li { border-top: 0; border-left: 1px solid var(--borde); }
+  }
+
+  /* Pasos */
+  .pasos { display: grid; gap: 40px; align-items: center; }
+  @media (min-width: 960px) { .pasos { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .pasos__lista { list-style: none; padding: 0; margin: 24px 0 32px; display: grid; gap: 20px; }
+  .pasos__lista li { display: flex; gap: 16px; align-items: flex-start; }
+  .pasos__lista h3 { margin: 4px 0 2px; }
+  .pasos__lista p { margin: 0; color: var(--gris); }
+  .pasos__numero {
+    flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--verde); color: #fff; font-family: var(--fuente-titulos); font-weight: 800; font-size: 1.1rem;
+  }
+  .pasos__imagen { border-radius: var(--radio); box-shadow: var(--sombra); width: 100%; }
+
+  /* Banner WhatsApp */
+  .wa-banner { display: grid; overflow: hidden; }
+  .wa-banner img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16 / 9; }
+  .wa-banner__texto { padding: 28px 24px; }
+  .wa-banner__texto .nota { display: flex; gap: 6px; align-items: center; }
+  .wa-banner__texto :global(.nota__icono) { color: var(--coral-oscuro); }
+  @media (min-width: 900px) {
+    .wa-banner { grid-template-columns: 1fr 1fr; align-items: center; }
+    .wa-banner img { aspect-ratio: auto; min-height: 100%; }
+    .wa-banner__texto { padding: 48px; }
+  }
+</style>

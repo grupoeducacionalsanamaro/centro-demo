@@ -1,0 +1,42 @@
+---
+interface Props {
+  titulo: string;
+  bajada?: string;
+  migas?: { texto: string; href?: string }[];
+  imagen?: string; // nombre en public/images sin extensión
+  imagenAlt?: string;
+}
+const { titulo, bajada, migas = [], imagen, imagenAlt = '' } = Astro.props;
+const todas = [{ texto: 'Inicio', href: '/' }, ...migas, { texto: titulo }];
+---
+<section class="encabezado-pagina">
+  <div class="contenedor">
+    <nav class="migas" aria-label="Ruta de navegación">
+      <ol>
+        {todas.map((m) => (
+          <li>{m.href ? <a href={m.href}>{m.texto}</a> : <span aria-current="page">{m.texto}</span>}</li>
+        ))}
+      </ol>
+    </nav>
+    <div class:list={['encabezado-pagina__grilla', { 'encabezado-pagina__grilla--imagen': imagen }]}>
+      <div>
+        <h1>{titulo}</h1>
+        {bajada && <p>{bajada}</p>}
+        <slot />
+      </div>
+      {imagen && (
+        <div class="encabezado-pagina__imagen">
+          <img
+            src={`/images/${imagen}.webp`}
+            srcset={`/images/${imagen}-640.webp 640w, /images/${imagen}.webp 1344w`}
+            sizes="(min-width: 900px) 520px, 100vw"
+            width="1344"
+            height="752"
+            alt={imagenAlt}
+            fetchpriority="high"
+          />
+        </div>
+      )}
+    </div>
+  </div>
+</section>

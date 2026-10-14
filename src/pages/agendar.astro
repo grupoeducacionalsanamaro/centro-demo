@@ -1,0 +1,373 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import AvisoUrgencia from '../components/AvisoUrgencia.astro';
+import Icono from '../components/Icono.astro';
+import { C } from '../lib/datos.js';
+
+// Datos mínimos que necesita el flujo en el navegador (todo sale de centro.json).
+const datosAgenda = {
+  especialidades: C.especialidades.map(({ slug, nombre, duracion, valorTexto, valorNota }) => ({ slug, nombre, duracion, valorTexto, valorNota })),
+  equipo: C.equipo.map(({ id, nombre, nombreCorto, titulo, especialidad, dias, imagen }) => ({ id, nombre, nombreCorto, titulo, especialidad, dias, imagen })),
+  horario: C.centro.horario,
+  festivos: C.centro.festivos,
+  centro: { nombre: C.centro.nombre, nombreCorto: C.centro.nombreCorto, direccion: C.direccionCompleta, whatsapp: C.centro.whatsapp, sitio: C.sitioCorto },
+};
+const avisoDemo = 'Esta es una demostración: tus datos no se envían a ningún servidor y quedan solo en este navegador.';
+const pasos = ['Especialidad', 'Profesional', 'Día y hora', 'Tus datos'];
+---
+<Base titulo="Agendar hora" descripcion="Agenda tu hora en línea en Centro Demo (sitio ficticio): elige especialidad, profesional, día y hora. Demostración: los datos quedan solo en tu navegador.">
+  <EncabezadoPagina
+    titulo="Agendar hora"
+    bajada="Reserva en 4 pasos simples. Al final recibirás un código y podrás confirmar por WhatsApp."
+  >
+    <p class="encabezado-nota"><Icono nombre="info" tamano={18} /> {avisoDemo}</p>
+  </EncabezadoPagina>
+
+  <section class="seccion seccion--reserva">
+    <div class="contenedor">
+      <AvisoUrgencia class="reserva-urgencia" />
+
+      <div class="reserva">
+        <div class="tarjeta reserva__principal">
+          <div id="flujo">
+            <ol class="progreso" aria-label="Pasos de la reserva">
+              {pasos.map((p, i) => (
+                <li class="progreso__paso" data-indice={i + 1} aria-current={i === 0 ? 'step' : undefined}>
+                  <span class="progreso__numero" aria-hidden="true">{i + 1}</span>
+                  <span class="progreso__texto"><span class="visualmente-oculto">Paso {i + 1}: </span>{p}</span>
+                </li>
+              ))}
+            </ol>
+            <div class="progreso__barra" aria-hidden="true"><span id="barra" style="width: 25%"></span></div>
+
+            <form id="form-reserva" novalidate>
+              <!-- Paso 1 -->
+              <section class="paso" data-paso="1" aria-labelledby="titulo-1">
+                <h2 id="titulo-1" tabindex="-1">¿Qué especialidad necesitas?</h2>
+                <fieldset>
+                  <legend class="visualmente-oculto">Especialidad</legend>
+                  <div class="opciones opciones--esp">
+                    {C.especialidades.map((e) => (
+                      <label class="opcion">
+                        <input type="radio" name="especialidad" value={e.slug} />
+                        <span class="opcion__icono"><Icono nombre={e.icono} /></span>
+                        <span class="opcion__texto">
+                          <strong>{e.nombre}</strong>
+                          <span>{e.duracion} min · {e.valorTexto}</span>
+                        </span>
+                        <Icono nombre="check" class="opcion__check" tamano={20} />
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+                <p class="nota">{C.centro.notaValores}</p>
+                <p class="error-paso" id="error-1" role="alert" hidden>Elige una especialidad para continuar.</p>
+              </section>
+
+              <!-- Paso 2 -->
+              <section class="paso" data-paso="2" aria-labelledby="titulo-2" hidden>
+                <h2 id="titulo-2" tabindex="-1">¿Con quién quieres atenderte?</h2>
+                <fieldset>
+                  <legend class="visualmente-oculto">Profesional</legend>
+                  <div class="opciones" id="opciones-profesional"></div>
+                </fieldset>
+                <p class="error-paso" id="error-2" role="alert" hidden>Elige un profesional o la opción «Cualquier profesional disponible».</p>
+              </section>
+
+              <!-- Paso 3 -->
+              <section class="paso" data-paso="3" aria-labelledby="titulo-3" hidden>
+                <h2 id="titulo-3" tabindex="-1">Elige día y hora</h2>
+                <p class="paso__bajada" id="bajada-3"></p>
+                <fieldset>
+                  <legend class="subtitulo">Día <span class="nota">(próximos 14 días)</span></legend>
+                  <div class="dias" id="dias"></div>
+                </fieldset>
+                <fieldset id="campo-horas">
+                  <legend class="subtitulo" id="leyenda-horas">Hora</legend>
+                  <div id="bloques" class="bloques"></div>
+                  <p class="leyenda-bloques" aria-hidden="true">
+                    <span><i class="muestra muestra--libre"></i> Disponible</span>
+                    <span><i class="muestra muestra--ocupado"></i> Ocupado</span>
+                  </p>
+                </fieldset>
+                <p class="error-paso" id="error-3" role="alert" hidden>Elige un día y una hora disponibles.</p>
+              </section>
+
+              <!-- Paso 4 -->
+              <section class="paso" data-paso="4" aria-labelledby="titulo-4" hidden>
+                <h2 id="titulo-4" tabindex="-1">Tus datos</h2>
+                <div class="aviso aviso--info aviso-demo">
+                  <Icono nombre="escudo" />
+                  <p><strong>{avisoDemo}</strong> Puedes usar datos inventados.</p>
+                </div>
+                <div class="campos">
+                  <div class="campo">
+                    <label for="r-nombre">Nombre y apellido</label>
+                    <input id="r-nombre" name="nombre" class="entrada" type="text" autocomplete="name" required aria-describedby="r-nombre-error" />
+                    <span class="error" id="r-nombre-error" hidden>Escribe tu nombre y apellido.</span>
+                  </div>
+                  <div class="campo">
+                    <label for="r-telefono">Teléfono móvil</label>
+                    <input id="r-telefono" name="telefono" class="entrada" type="tel" inputmode="tel" autocomplete="tel" placeholder="+56 9 1234 5678" required aria-describedby="r-telefono-ayuda r-telefono-error" />
+                    <span class="ayuda" id="r-telefono-ayuda">Celular chileno: +56 9 seguido de 8 dígitos.</span>
+                    <span class="error" id="r-telefono-error" hidden>Revisa el número: debe ser +56 9 seguido de 8 dígitos (por ejemplo, +56 9 1234 5678).</span>
+                  </div>
+                  <div class="campo">
+                    <label for="r-correo">Correo electrónico <span class="opcional">(opcional)</span></label>
+                    <input id="r-correo" name="correo" class="entrada" type="email" autocomplete="email" aria-describedby="r-correo-error" />
+                    <span class="error" id="r-correo-error" hidden>Revisa el correo, por ejemplo nombre@correo.cl.</span>
+                  </div>
+                  <div class="campo">
+                    <label for="r-motivo">Motivo de la consulta</label>
+                    <select id="r-motivo" name="motivo" class="entrada" required aria-describedby="r-motivo-ayuda r-motivo-error">
+                      <option value="">Selecciona una opción</option>
+                      <option>Primera consulta</option>
+                      <option>Control</option>
+                      <option>Procedimiento</option>
+                      <option>Otro</option>
+                    </select>
+                    <span class="ayuda" id="r-motivo-ayuda">No te pedimos detalles de salud: los conversarás directamente con tu profesional.</span>
+                    <span class="error" id="r-motivo-error" hidden>Selecciona el motivo de la consulta.</span>
+                  </div>
+                </div>
+                <div class="consentimientos">
+                  <div class="campo">
+                    <label class="casilla">
+                      <input type="checkbox" id="r-privacidad" name="privacidad" required aria-describedby="r-privacidad-error" />
+                      <span>He leído y acepto la <a href="/privacidad" target="_blank" rel="noopener">Política de privacidad</a> <span class="opcional">(obligatorio)</span>.</span>
+                    </label>
+                    <span class="error" id="r-privacidad-error" hidden>Debes aceptar la Política de privacidad para reservar.</span>
+                  </div>
+                  <div class="campo">
+                    <label class="casilla">
+                      <input type="checkbox" id="r-recordatorios" name="recordatorios" />
+                      <span>Quiero recibir recordatorios de mi hora por WhatsApp <span class="opcional">(opcional)</span>.</span>
+                    </label>
+                  </div>
+                </div>
+              </section>
+
+              <div class="reserva__nav">
+                <button type="button" class="boton boton--fantasma" id="btn-volver" hidden>
+                  <Icono nombre="chevron-izq" tamano={20} /> Volver
+                </button>
+                <button type="button" class="boton boton--primario" id="btn-seguir">
+                  Continuar <Icono nombre="chevron-der" tamano={20} />
+                </button>
+                <button type="submit" class="boton boton--primario" id="btn-confirmar" hidden>
+                  <Icono nombre="check" tamano={20} /> Confirmar reserva
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Confirmación -->
+          <div id="confirmacion" class="confirmacion" hidden>
+            <img src="/images/reserva-confirmada-640.webp" width="640" height="482" alt="" />
+            <h2 id="titulo-confirmacion" tabindex="-1">¡Tu hora quedó reservada!</h2>
+            <p>Tu código de reserva es</p>
+            <p class="codigo" id="conf-codigo"></p>
+            <dl class="conf-resumen" id="conf-resumen"></dl>
+            <div class="confirmacion__botones">
+              <a class="boton boton--primario" id="btn-whatsapp" target="_blank" rel="noopener">
+                <Icono nombre="whatsapp" tamano={20} /> Confirmar por WhatsApp
+              </a>
+              <button type="button" class="boton boton--secundario" id="btn-ics">
+                <Icono nombre="descargar" tamano={20} /> Agregar a mi calendario
+              </button>
+            </div>
+            <p class="nota">Reserva ficticia de demostración: quedó guardada solo en este navegador.</p>
+            <div class="confirmacion__secundarios">
+              <a href="#mis-reservas" class="enlace-flecha">Ver mis reservas <Icono nombre="flecha" tamano={18} /></a>
+              <button type="button" class="boton boton--fantasma" id="btn-otra">Agendar otra hora</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="reserva__lateral" aria-label="Resumen de tu reserva">
+          <div class="tarjeta resumen">
+            <h2>Tu reserva</h2>
+            <dl id="resumen">
+              <div><dt>Especialidad</dt><dd data-r="especialidad">—</dd></div>
+              <div><dt>Profesional</dt><dd data-r="profesional">—</dd></div>
+              <div><dt>Día</dt><dd data-r="dia">—</dd></div>
+              <div><dt>Hora</dt><dd data-r="hora">—</dd></div>
+              <div><dt>Duración</dt><dd data-r="duracion">—</dd></div>
+              <div><dt>Valor referencial</dt><dd data-r="valor">—</dd></div>
+            </dl>
+            <p class="nota">{C.centro.notaValores}</p>
+          </div>
+          <div class="aviso aviso--info">
+            <Icono nombre="escudo" />
+            <p>{avisoDemo}</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mis reservas -->
+  <section class="seccion seccion--alterna" id="mis-reservas" aria-labelledby="titulo-mis-reservas">
+    <div class="contenedor contenedor--angosto">
+      <h2 id="titulo-mis-reservas" tabindex="-1">Mis reservas</h2>
+      <p class="mis-reservas__bajada">Reservas de demostración guardadas en este navegador. Nadie más puede verlas.</p>
+      <p id="estado-reservas" class="visualmente-oculto" aria-live="polite"></p>
+      <div id="lista-reservas"></div>
+      <div class="mis-reservas__pie">
+        <button type="button" class="boton boton--peligro boton--chico" id="btn-borrar-todo">
+          <Icono nombre="basura" tamano={18} /> Borrar todos los datos de demostración
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="datos-agenda" set:html={JSON.stringify(datosAgenda)} />
+</Base>
+
+<script>
+  import './../scripts/reserva';
+</script>
+
+<style>
+  .encabezado-nota { display: flex; gap: 8px; align-items: flex-start; margin-top: 16px !important; font-size: 0.95rem !important; color: var(--verde-oscuro) !important; font-weight: 600; }
+  .encabezado-nota :global(.icono) { flex: none; margin-top: 3px; }
+  .seccion--reserva { padding-top: 32px; }
+  :global(.reserva-urgencia) { margin-bottom: 24px; }
+
+  .reserva { display: grid; gap: 24px; align-items: start; }
+  @media (min-width: 1000px) { .reserva { grid-template-columns: 1fr 340px; gap: 32px; } }
+  .reserva__principal { padding: 20px; }
+  @media (min-width: 640px) { .reserva__principal { padding: 32px; } }
+  .reserva__lateral { display: grid; gap: 16px; }
+  @media (min-width: 1000px) { .reserva__lateral { position: sticky; top: calc(var(--alto-cabecera) + 24px); } }
+
+  /* Progreso */
+  .progreso { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .progreso__paso { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: 0.8rem; color: var(--gris); font-weight: 600; }
+  @media (min-width: 640px) { .progreso__paso { flex-direction: row; justify-content: center; font-size: 0.9rem; } }
+  .progreso__numero {
+    width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex: none;
+    border: 2px solid var(--borde); background: var(--blanco); font-family: var(--fuente-titulos); font-weight: 800;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .progreso__paso[aria-current='step'] { color: var(--tinta); }
+  .progreso__paso[aria-current='step'] .progreso__numero { border-color: var(--verde); color: var(--verde); }
+  .progreso__paso.hecho .progreso__numero { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .progreso__barra { height: 6px; border-radius: 999px; background: var(--verde-claro); overflow: hidden; margin-bottom: 28px; }
+  .progreso__barra span { display: block; height: 100%; background: var(--verde); border-radius: 999px; transition: width 0.3s ease; }
+
+  .paso h2 { font-size: 1.5rem; outline: none; }
+  .paso__bajada { color: var(--gris); }
+  fieldset { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
+  .subtitulo { font-family: var(--fuente-titulos); font-weight: 700; margin-bottom: 12px; padding: 0; }
+  .error-paso { color: var(--coral-oscuro); font-weight: 600; margin: 8px 0 0; }
+
+  /* Opciones seleccionables (radio) */
+  .opciones { display: grid; gap: 12px; }
+  @media (min-width: 640px) { .opciones--esp { grid-template-columns: repeat(2, 1fr); } }
+  .opciones :global(.opcion) {
+    position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px; min-height: 72px;
+    border: 1.5px solid var(--borde); border-radius: var(--radio); background: var(--blanco); cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .opciones :global(.opcion:hover) { border-color: var(--verde); }
+  .opciones :global(.opcion input) { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .opciones :global(.opcion:has(input:checked)) { border-color: var(--verde); background: var(--verde-claro); box-shadow: 0 0 0 1px var(--verde); }
+  .opciones :global(.opcion:has(input:focus-visible)) { outline: 3px solid var(--verde); outline-offset: 2px; }
+  .opciones :global(.opcion__icono) { flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--verde-claro); color: var(--verde); }
+  .opciones :global(.opcion:has(input:checked) .opcion__icono) { background: var(--verde); color: #fff; }
+  .opciones :global(.opcion__avatar) { flex: none; width: 52px; height: 52px; border-radius: 50%; object-fit: cover; background: var(--verde-claro); }
+  .opciones :global(.opcion__texto) { display: grid; flex: 1; }
+  .opciones :global(.opcion__texto span) { color: var(--gris); font-size: 0.88rem; }
+  .opciones :global(.opcion__check) { color: var(--verde); opacity: 0; transition: opacity 0.15s ease; }
+  .opciones :global(.opcion:has(input:checked) .opcion__check) { opacity: 1; }
+
+  /* Días */
+  .dias { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  @media (min-width: 640px) { .dias { grid-template-columns: repeat(7, 1fr); } }
+  .dias :global(.dia) {
+    position: relative; display: grid; justify-items: center; gap: 0; padding: 10px 4px; border-radius: 12px;
+    border: 1.5px solid var(--borde); background: var(--blanco); cursor: pointer; text-align: center; line-height: 1.2;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+  .dias :global(.dia input) { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .dias :global(.dia:hover) { border-color: var(--verde); }
+  .dias :global(.dia__semana) { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--gris); letter-spacing: 0.04em; }
+  .dias :global(.dia__numero) { font-family: var(--fuente-titulos); font-size: 1.35rem; font-weight: 800; }
+  .dias :global(.dia__estado) { font-size: 0.7rem; color: var(--verde-oscuro); font-weight: 600; }
+  .dias :global(.dia:has(input:checked)) { background: var(--verde); border-color: var(--verde); color: #fff; }
+  .dias :global(.dia:has(input:checked) .dia__semana), .dias :global(.dia:has(input:checked) .dia__estado) { color: #fff; }
+  .dias :global(.dia:has(input:focus-visible)) { outline: 3px solid var(--verde); outline-offset: 2px; }
+  .dias :global(.dia:has(input:disabled)) { cursor: not-allowed; background: #f1efea; border-style: dashed; }
+  .dias :global(.dia:has(input:disabled) .dia__numero) { color: #8a96a0; }
+  .dias :global(.dia:has(input:disabled) .dia__estado) { color: #6b7883; }
+
+  /* Bloques horarios */
+  .bloques { display: grid; gap: 16px; }
+  .bloques :global(.bloques__grupo h3) { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gris); margin-bottom: 8px; }
+  .bloques :global(.bloques__lista) { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  .bloques :global(.bloque) {
+    position: relative; display: grid; place-items: center; min-height: 44px; border-radius: 10px;
+    border: 1.5px solid var(--verde); background: var(--blanco); color: var(--verde-oscuro);
+    font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color 0.15s ease;
+  }
+  .bloques :global(.bloque input) { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .bloques :global(.bloque:hover) { background: var(--verde-claro); }
+  .bloques :global(.bloque:has(input:checked)) { background: var(--verde); color: #fff; }
+  .bloques :global(.bloque:has(input:focus-visible)) { outline: 3px solid var(--verde); outline-offset: 2px; }
+  .bloques :global(.bloque:has(input:disabled)) { border-color: var(--borde); background: #f1efea; color: #6b7883; text-decoration: line-through; cursor: not-allowed; font-weight: 500; }
+  .bloques :global(.bloques__vacio) { color: var(--gris); padding: 16px; border-radius: 12px; background: var(--crema); margin: 0; }
+  .leyenda-bloques { display: flex; gap: 16px; font-size: 0.8rem; color: var(--gris); margin: 12px 0 0; }
+  .leyenda-bloques span { display: inline-flex; align-items: center; gap: 6px; }
+  .muestra { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--verde); }
+  .muestra--ocupado { border-color: var(--borde); background: #f1efea; }
+
+  /* Datos */
+  .aviso-demo { margin-bottom: 20px; }
+  .campos { display: grid; gap: 0 20px; }
+  @media (min-width: 640px) { .campos { grid-template-columns: 1fr 1fr; } }
+  .opcional { font-weight: 400; color: var(--gris); }
+  .consentimientos { border-top: 1px solid var(--borde); padding-top: 18px; }
+
+  .reserva__nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--borde); }
+  .reserva__nav .boton--primario { margin-left: auto; }
+  .reserva__nav .boton { white-space: nowrap; }
+  @media (max-width: 479px) {
+    .reserva__nav { flex-direction: column-reverse; }
+    .reserva__nav .boton { width: 100%; margin-left: 0; }
+  }
+
+  /* Confirmación */
+  .confirmacion { text-align: center; }
+  .confirmacion img { width: 220px; margin: 0 auto 8px; border-radius: var(--radio); }
+  .confirmacion h2 { outline: none; }
+  .codigo { font-family: var(--fuente-titulos); font-size: 2rem; font-weight: 800; letter-spacing: 0.06em; color: var(--verde-oscuro); background: var(--verde-claro); display: inline-block; padding: 8px 20px; border-radius: 12px; }
+  .conf-resumen { display: grid; gap: 0; text-align: left; max-width: 440px; margin: 16px auto 24px; border: 1px solid var(--borde); border-radius: var(--radio); }
+  .conf-resumen :global(div) { display: flex; justify-content: space-between; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--borde); }
+  .conf-resumen :global(div:last-child) { border-bottom: 0; }
+  .conf-resumen :global(dt) { color: var(--gris); }
+  .conf-resumen :global(dd) { margin: 0; font-weight: 600; text-align: right; }
+  .confirmacion__botones { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 12px; }
+  @media (max-width: 479px) { .confirmacion__botones .boton { width: 100%; } }
+  .confirmacion__secundarios { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; align-items: center; margin-top: 8px; }
+
+  /* Resumen lateral */
+  .resumen { padding: 24px; }
+  .resumen h2 { font-size: 1.2rem; }
+  .resumen dl { margin: 0 0 12px; display: grid; gap: 10px; }
+  .resumen dl div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--borde); padding-bottom: 8px; }
+  .resumen dt { color: var(--gris); font-size: 0.9rem; }
+  .resumen dd { margin: 0; font-weight: 600; text-align: right; }
+
+  /* Mis reservas */
+  .mis-reservas__bajada { color: var(--gris); }
+  #titulo-mis-reservas { outline: none; }
+  #lista-reservas :global(.reserva-item) { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding: 18px 20px; margin-bottom: 12px; }
+  #lista-reservas :global(.reserva-item h3) { margin: 0 0 2px; font-size: 1.05rem; }
+  #lista-reservas :global(.reserva-item p) { margin: 0; color: var(--gris); font-size: 0.92rem; }
+  #lista-reservas :global(.reserva-item__codigo) { font-family: var(--fuente-titulos); font-weight: 800; color: var(--verde-oscuro); }
+  #lista-reservas :global(.reserva-item__acciones) { display: flex; gap: 8px; flex-wrap: wrap; }
+  #lista-reservas :global(.vacio) { padding: 24px; text-align: center; color: var(--gris); background: var(--blanco); border-radius: var(--radio); }
+  .mis-reservas__pie { margin-top: 20px; }
+</style>

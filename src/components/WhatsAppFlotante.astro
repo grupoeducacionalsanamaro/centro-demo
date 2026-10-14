@@ -1,0 +1,33 @@
+---
+import Icono from './Icono.astro';
+import { C } from '../lib/datos.js';
+---
+<a
+  class="wa-flotante"
+  href={C.waLink(C.mensajeWhatsapp)}
+  target="_blank"
+  rel="noopener"
+  aria-label="Escríbenos por WhatsApp (se abre en una nueva pestaña)"
+>
+  <Icono nombre="whatsapp" tamano={28} />
+  <span class="wa-flotante__texto" aria-hidden="true">WhatsApp</span>
+</a>
+
+<style>
+  .wa-flotante {
+    position: fixed; right: 16px; bottom: 16px; z-index: 40;
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 56px; padding: 0 14px; border-radius: 999px;
+    background: var(--verde); color: #fff; text-decoration: none;
+    font-family: var(--fuente-titulos); font-weight: 700;
+    box-shadow: 0 6px 20px rgb(28 43 57 / 0.25);
+    transition: background-color 0.18s ease, transform 0.18s ease;
+  }
+  .wa-flotante:hover { background: var(--verde-oscuro); color: #fff; transform: translateY(-2px); }
+  .wa-flotante__texto { display: none; }
+  @media (min-width: 768px) {
+    .wa-flotante { right: 24px; bottom: 24px; padding: 0 20px 0 16px; }
+    .wa-flotante__texto { display: inline; }
+  }
+  :global(body.menu-abierto) .wa-flotante { display: none; }
+</style>

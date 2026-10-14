@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from '../components/Icono.astro';
+---
+<Base titulo="Página no encontrada" descripcion="La página que buscas no existe en Centro Demo (sitio ficticio).">
+  <section class="seccion">
+    <div class="contenedor no-encontrada">
+      <img src="/images/pagina-404-640.webp" width="640" height="482" alt="Ilustración de un estetoscopio confundido mirando un mapa con un camino hacia el centro." />
+      <div>
+        <span class="antetitulo">Error 404</span>
+        <h1>Esta página no existe</h1>
+        <p>Es posible que el enlace esté incompleto o que la página haya cambiado de lugar. Te ayudamos a retomar el camino:</p>
+        <div class="no-encontrada__botones">
+          <a href="/" class="boton boton--primario"><Icono nombre="hogar" tamano={20} /> Ir al inicio</a>
+          <a href="/agendar" class="boton boton--secundario"><Icono nombre="calendario-check" tamano={20} /> Agendar hora</a>
+        </div>
+        <ul class="no-encontrada__enlaces">
+          <li><a href="/especialidades">Especialidades</a></li>
+          <li><a href="/equipo">Equipo</a></li>
+          <li><a href="/preguntas-frecuentes">Preguntas frecuentes</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .no-encontrada { display: grid; gap: 32px; align-items: center; }
+  @media (min-width: 900px) { .no-encontrada { grid-template-columns: 1fr 1fr; gap: 56px; } }
+  .no-encontrada img { border-radius: var(--radio); width: 100%; max-width: 520px; margin-inline: auto; }
+  .no-encontrada p { color: var(--gris); font-size: 1.1rem; }
+  .no-encontrada__botones { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+  .no-encontrada__enlaces { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+</style>

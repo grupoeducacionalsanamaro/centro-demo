@@ -1,0 +1,41 @@
+---
+import Icono from './Icono.astro';
+import type { Articulo } from '../lib/articulos';
+interface Props { a: Articulo; nivelTitulo?: 'h2' | 'h3' }
+const { a, nivelTitulo = 'h3' } = Astro.props;
+const Titulo = nivelTitulo;
+---
+<article class="tarjeta art" data-especialidad={a.data.especialidad}>
+  {a.data.imagen && (
+    <div class="art__imagen">
+      <img src={`/images/${a.data.imagen}-640.webp`} width="640" height="358" alt="" loading="lazy" decoding="async" />
+    </div>
+  )}
+  <div class="art__cuerpo">
+    <span class="etiqueta">{a.especialidadNombre}</span>
+    <Titulo class="art__titulo"><a href={`/educacion/${a.slug}`}>{a.data.titulo}</a></Titulo>
+    <p>{a.data.descripcion}</p>
+    <p class="art__meta">
+      <time datetime={a.fechaIso}>{a.fechaTexto}</time>
+      <span aria-hidden="true">·</span>
+      <span><Icono nombre="reloj" tamano={15} /> {a.minutosLectura} min de lectura</span>
+    </p>
+  </div>
+</article>
+
+<style>
+  .art { position: relative; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s ease, transform 0.2s ease; }
+  .art:hover { box-shadow: var(--sombra-alta); transform: translateY(-3px); }
+  .art:focus-within { box-shadow: 0 0 0 3px var(--verde); }
+  .art__imagen { aspect-ratio: 16 / 9; overflow: hidden; }
+  .art__imagen img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .art:hover .art__imagen img { transform: scale(1.04); }
+  .art__cuerpo { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+  .art__titulo { font-size: 1.15rem; margin: 12px 0 8px; }
+  .art__titulo a { color: var(--tinta); text-decoration: none; }
+  .art__titulo a::after { content: ''; position: absolute; inset: 0; }
+  .art__titulo a:focus-visible { outline: none; }
+  p { color: var(--gris); font-size: 0.95rem; }
+  .art__meta { margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.85rem; }
+  .art__meta span { display: inline-flex; gap: 5px; align-items: center; }
+</style>

@@ -1,0 +1,135 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import Icono from '../components/Icono.astro';
+import { C } from '../lib/datos.js';
+
+const secciones = [
+  ['responsable', 'Quién es responsable de tus datos'],
+  ['datos', 'Qué datos recolectamos y para qué'],
+  ['marketing', 'Comunicaciones comerciales'],
+  ['ia', 'Uso de inteligencia artificial'],
+  ['derechos', 'Tus derechos'],
+  ['seguridad', 'Seguridad y conservación'],
+  ['sitio', 'Este sitio de demostración'],
+];
+---
+<Base titulo="Política de privacidad" descripcion="Política de privacidad de ejemplo de Centro Demo (ficticio), en lenguaje simple y alineada con la Ley 21.719 y la Ley 20.584 de Chile.">
+  <EncabezadoPagina
+    titulo="Política de privacidad"
+    bajada="Te explicamos en lenguaje simple cómo cuidamos tus datos personales y tu información de salud."
+    imagen="privacidad-proteccion-datos"
+    imagenAlt="Ilustración de un escudo con un candado delante de una ficha con datos personales."
+  />
+
+  <section class="seccion">
+    <div class="contenedor privacidad">
+      <aside class="indice" aria-labelledby="indice-titulo">
+        <div class="tarjeta indice__caja">
+          <h2 id="indice-titulo">Contenido</h2>
+          <ol>
+            {secciones.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}
+          </ol>
+        </div>
+      </aside>
+
+      <div>
+        <div class="aviso aviso--urgencia aviso-legal" role="note">
+          <Icono nombre="alerta" />
+          <p><strong>Texto de ejemplo con fines demostrativos. No constituye asesoría legal.</strong> {C.centro.nombreCorto} es un centro ficticio.</p>
+        </div>
+
+        <div class="prosa">
+          <p>
+            Esta política explica cómo {C.centro.nombre} trata los datos personales de quienes se atienden con nosotros o nos contactan,
+            conforme a la Ley N.° 21.719 sobre protección de datos personales y a la Ley N.° 20.584, que regula los derechos y deberes
+            de las personas en relación con acciones vinculadas a su atención en salud. Última actualización: octubre de 2026.
+          </p>
+
+          <h2 id="responsable">1. Quién es responsable de tus datos</h2>
+          <p>
+            El responsable del tratamiento es {C.centro.nombre} (entidad ficticia), con domicilio en {C.direccionCompleta}.
+            Para cualquier consulta sobre tus datos puedes escribir a <a href={`mailto:${C.centro.correo}`}>{C.centro.correo}</a>
+            o llamar al {C.centro.telefono} (datos de ejemplo).
+          </p>
+
+          <h2 id="datos">2. Qué datos recolectamos y para qué</h2>
+          <p>Solo pedimos los datos necesarios para cada finalidad:</p>
+          <ul>
+            <li><strong>Agenda:</strong> nombre, teléfono móvil, correo (opcional) y motivo general de la consulta, para reservar, confirmar, reprogramar o cancelar tu hora.</li>
+            <li><strong>Atención de salud:</strong> la información clínica que registran nuestros profesionales en tu ficha durante la consulta. Es un dato sensible y confidencial: solo acceden a ella las personas del equipo que participan en tu atención, como establece la Ley 20.584.</li>
+            <li><strong>Recordatorios:</strong> si lo autorizas, usamos tu teléfono para enviarte recordatorios de tu hora por WhatsApp. Puedes retirar esta autorización cuando quieras.</li>
+            <li><strong>Pagos:</strong> los datos necesarios para emitir tu boleta.</li>
+          </ul>
+          <p>No pedimos información clínica en los formularios del sitio web ni por WhatsApp.</p>
+
+          <h2 id="marketing">3. Comunicaciones comerciales</h2>
+          <p>
+            El uso de tus datos para enviarte novedades, campañas o promociones es una finalidad distinta a tu atención y
+            <strong>requiere un consentimiento aparte, libre y específico</strong>. Si no lo das, tu atención no se ve afectada.
+            Puedes retirarlo en cualquier momento respondiendo «NO» al mensaje o escribiendo a nuestro correo.
+          </p>
+
+          <h2 id="ia">4. Uso de herramientas de inteligencia artificial</h2>
+          <ul>
+            <li>Nuestro <strong>asistente de WhatsApp</strong> responde solo consultas administrativas (horarios, valores, ubicación y reservas) con la información publicada en este sitio.</li>
+            <li>Las <strong>consultas clínicas siempre las atiende una persona</strong> de nuestro equipo. Si escribes sobre síntomas, diagnósticos o tratamientos, el asistente deriva tu mensaje a una persona.</li>
+            <li>El asistente no atiende urgencias: ante una urgencia, llama al SAMU 131 o acude al servicio de urgencia más cercano.</li>
+            <li>Si durante la consulta un profesional usa una herramienta que <strong>transcribe la conversación</strong> para ayudar a registrar la ficha, te lo informará antes y te pedirá tu autorización. Puedes negarte sin que eso afecte tu atención.</li>
+          </ul>
+
+          <h2 id="derechos">5. Tus derechos</h2>
+          <p>Como titular de tus datos puedes ejercer en cualquier momento los derechos de:</p>
+          <ul>
+            <li><strong>Acceso:</strong> saber qué datos tenemos sobre ti y cómo los usamos.</li>
+            <li><strong>Rectificación:</strong> corregir datos inexactos o incompletos.</li>
+            <li><strong>Supresión:</strong> pedir que eliminemos tus datos cuando ya no sean necesarios, salvo aquellos que la ley nos obliga a conservar, como la ficha clínica.</li>
+            <li><strong>Oposición:</strong> oponerte a ciertos tratamientos, por ejemplo, a las comunicaciones comerciales.</li>
+            <li><strong>Portabilidad:</strong> recibir tus datos en un formato estructurado y de uso común.</li>
+            <li><strong>Bloqueo:</strong> pedir la suspensión temporal del tratamiento mientras se resuelve una solicitud.</li>
+          </ul>
+          <p>
+            Para ejercerlos, escríbenos a <a href={`mailto:${C.centro.correo}`}>{C.centro.correo}</a> indicando tu nombre y el derecho que quieres ejercer.
+            Responderemos en un plazo máximo de <strong>30 días corridos</strong>, prorrogable por una vez por igual período si es necesario, informándote el motivo.
+            Si no quedas conforme con la respuesta, puedes recurrir a la Agencia de Protección de Datos Personales.
+          </p>
+
+          <h2 id="seguridad">6. Seguridad y conservación</h2>
+          <p>
+            Aplicamos medidas técnicas y organizativas para proteger tus datos: acceso restringido según el rol de cada persona,
+            contraseñas y doble factor de autenticación, cifrado de las comunicaciones, respaldos periódicos y capacitación del equipo
+            en confidencialidad.
+          </p>
+          <p>
+            Conservamos los datos de agenda mientras sean necesarios para gestionar tu atención. La ficha clínica se conserva por el plazo
+            que exige la normativa sanitaria vigente. Si damos aviso de un incidente de seguridad que afecte tus datos, lo haremos según lo que exige la ley.
+          </p>
+
+          <h2 id="sitio">7. Este sitio de demostración</h2>
+          <p>
+            Este sitio es ficticio. Los formularios <strong>no envían información a ningún servidor</strong>: las reservas que hagas quedan
+            guardadas solo en el almacenamiento local (<code>localStorage</code>) de tu navegador y puedes borrarlas desde
+            <a href="/agendar#mis-reservas">Mis reservas</a>. El sitio no usa cookies de seguimiento ni herramientas de analítica.
+          </p>
+
+          <div class="aviso aviso--urgencia aviso-legal" role="note">
+            <Icono nombre="alerta" />
+            <p><strong>Texto de ejemplo con fines demostrativos. No constituye asesoría legal.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacidad { display: grid; gap: 32px; }
+  @media (min-width: 1000px) { .privacidad { grid-template-columns: 280px minmax(0, 760px); gap: 56px; } }
+  .indice__caja { padding: 20px 24px; }
+  @media (min-width: 1000px) { .indice__caja { position: sticky; top: calc(var(--alto-cabecera) + 24px); } }
+  .indice h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gris); }
+  .indice ol { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; font-size: 0.95rem; }
+  .aviso-legal { margin-bottom: 28px; }
+  .prosa .aviso-legal { margin-top: 40px; }
+  code { background: var(--verde-claro); padding: 1px 6px; border-radius: 6px; font-size: 0.9em; }
+</style>

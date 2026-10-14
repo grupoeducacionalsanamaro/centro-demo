@@ -1,0 +1,49 @@
+---
+import Icono from './Icono.astro';
+interface Props {
+  e: { slug: string; nombre: string; icono: string; imagen: string; descripcionBreve: string; duracion: number; valorTexto: string; valorNota: string };
+  conValor?: boolean;
+}
+const { e, conValor = false } = Astro.props;
+---
+<article class="tarjeta tarjeta-esp">
+  <div class="tarjeta-esp__imagen">
+    <img src={`/images/${e.imagen}-640.webp`} width="640" height="482" alt="" loading="lazy" decoding="async" />
+  </div>
+  <div class="tarjeta-esp__cuerpo">
+    <span class="tarjeta-esp__icono"><Icono nombre={e.icono} /></span>
+    <h3><a href={`/especialidades/${e.slug}`}>{e.nombre}</a></h3>
+    <p>{e.descripcionBreve}</p>
+    {conValor && (
+      <p class="tarjeta-esp__meta">
+        <span><Icono nombre="reloj" tamano={16} /> {e.duracion} min</span>
+        <span>{e.valorTexto} · {e.valorNota}</span>
+      </p>
+    )}
+    <span class="enlace-flecha" aria-hidden="true">Ver especialidad <Icono nombre="flecha" tamano={18} /></span>
+  </div>
+</article>
+
+<style>
+  /* Toda la tarjeta es clicable: el ::after del enlace del título cubre la tarjeta (sin anidar enlaces). */
+  .tarjeta-esp { position: relative; overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s ease, transform 0.2s ease; }
+  .tarjeta-esp:hover { box-shadow: var(--sombra-alta); transform: translateY(-3px); }
+  .tarjeta-esp:focus-within { box-shadow: 0 0 0 3px var(--verde); }
+  .tarjeta-esp__imagen { aspect-ratio: 16 / 10; overflow: hidden; background: var(--verde-claro); }
+  .tarjeta-esp__imagen img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .tarjeta-esp:hover .tarjeta-esp__imagen img { transform: scale(1.04); }
+  .tarjeta-esp__cuerpo { padding: 0 22px 22px; display: flex; flex-direction: column; flex: 1; }
+  .tarjeta-esp__icono {
+    width: 52px; height: 52px; margin: -26px 0 14px; border-radius: 14px;
+    display: grid; place-items: center; background: var(--verde); color: #fff; box-shadow: var(--sombra);
+    position: relative;
+  }
+  h3 { margin-bottom: 6px; }
+  h3 a { color: var(--tinta); text-decoration: none; }
+  h3 a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  h3 a:focus-visible { outline: none; }
+  p { color: var(--gris); margin-bottom: 14px; }
+  .tarjeta-esp__meta { display: flex; gap: 16px; font-size: 0.9rem; color: var(--tinta); font-weight: 600; }
+  .tarjeta-esp__meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .enlace-flecha { margin-top: auto; color: var(--verde-oscuro); }
+</style>

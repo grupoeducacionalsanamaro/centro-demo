@@ -1,0 +1,21 @@
+{
+  "name": "centro-demo",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "base": "node scripts/generar-base.mjs",
+    "prebuild": "node scripts/generar-base.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "imagenes": "node scripts/convertir-imagenes.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.8"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
+  }
+}

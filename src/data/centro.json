@@ -1,0 +1,268 @@
+{
+  "centro": {
+    "nombre": "Centro Demo — Salud Integral",
+    "nombreCorto": "Centro Demo",
+    "eslogan": "Atención cercana, en un solo lugar.",
+    "sitioUrl": "https://centro-demo.vercel.app",
+    "direccion": {
+      "calle": "Av. Ejemplo 1234, oficina 501",
+      "comuna": "Providencia",
+      "ciudad": "Santiago",
+      "nota": "Dirección ficticia"
+    },
+    "telefono": "+56 9 0000 0000",
+    "whatsapp": "+56 9 0000 0000",
+    "correo": "contacto@centrodemo.example",
+    "notaContacto": "Datos de contacto de ejemplo",
+    "horario": [
+      { "dia": 1, "abre": "08:30", "cierra": "20:00" },
+      { "dia": 2, "abre": "08:30", "cierra": "20:00" },
+      { "dia": 3, "abre": "08:30", "cierra": "20:00" },
+      { "dia": 4, "abre": "08:30", "cierra": "20:00" },
+      { "dia": 5, "abre": "08:30", "cierra": "20:00" },
+      { "dia": 6, "abre": "09:00", "cierra": "14:00" }
+    ],
+    "festivos": ["2026-10-31", "2026-11-01", "2026-12-08", "2026-12-25", "2027-01-01", "2027-04-02", "2027-04-03", "2027-05-01", "2027-05-21"],
+    "mediosPago": ["efectivo", "débito", "crédito", "transferencia"],
+    "prevision": "Atención particular. Entregamos boleta para que solicites el reembolso en tu isapre o seguro complementario. No tenemos convenios con instituciones específicas.",
+    "estacionamiento": "Convenio con el estacionamiento del edificio (ficticio): pide tu ticket de convenio en recepción.",
+    "accesibilidad": "Acceso universal en todo el edificio.",
+    "anticipacionCancelacion": "24 horas",
+    "urgencias": "Si tienes una urgencia, llama al SAMU 131 o acude al servicio de urgencia más cercano. Este sitio y nuestro WhatsApp no atienden urgencias.",
+    "avisoFicticio": "Sitio ficticio creado con fines demostrativos para la ponencia LEVEL UP 2026. No es un centro de salud real.",
+    "notaValores": "Valores referenciales. Consulta el valor final al agendar."
+  },
+
+  "especialidades": [
+    {
+      "slug": "medicina-general",
+      "nombre": "Medicina general",
+      "icono": "estetoscopio",
+      "imagen": "especialidad-medicina-general",
+      "descripcionBreve": "Consultas, controles y certificados.",
+      "descripcion": "La puerta de entrada a tu cuidado. Te atendemos en consultas por molestias frecuentes, controles periódicos y emisión de certificados, y te orientamos si necesitas ver a otra especialidad.",
+      "queAtiende": [
+        "Consultas por molestias frecuentes de adultos y adolescentes",
+        "Controles de salud preventivos",
+        "Seguimiento de condiciones crónicas en control",
+        "Certificados médicos (salud compatible, deporte, trabajo)",
+        "Derivación a otras especialidades cuando corresponde"
+      ],
+      "primeraConsulta": "Conversamos sobre el motivo de tu visita y tus antecedentes, realizamos un examen físico general y acordamos los siguientes pasos. Si tienes exámenes o informes previos, tráelos.",
+      "duracion": 30,
+      "valor": 35000,
+      "valorNota": "consulta"
+    },
+    {
+      "slug": "kinesiologia",
+      "nombre": "Kinesiología",
+      "icono": "columna",
+      "imagen": "especialidad-kinesiologia",
+      "descripcionBreve": "Rehabilitación musculoesquelética y dolor lumbar.",
+      "descripcion": "Te acompañamos a recuperar movilidad y funcionalidad con ejercicio terapéutico y educación, para que vuelvas a tus actividades diarias con más confianza.",
+      "queAtiende": [
+        "Dolor lumbar y cervical",
+        "Rehabilitación después de lesiones musculares o articulares",
+        "Molestias asociadas al trabajo sentado",
+        "Rehabilitación deportiva",
+        "Programas de ejercicio terapéutico"
+      ],
+      "primeraConsulta": "Hacemos una evaluación de tu movilidad, fuerza y postura, conversamos sobre tus actividades diarias y definimos juntos un plan de sesiones. Te recomendamos venir con ropa cómoda.",
+      "duracion": 45,
+      "valor": 28000,
+      "valorNota": "sesión"
+    },
+    {
+      "slug": "odontologia",
+      "nombre": "Odontología",
+      "icono": "diente",
+      "imagen": "especialidad-odontologia",
+      "descripcionBreve": "Evaluación, limpieza y tratamientos generales.",
+      "descripcion": "Cuidamos tu salud bucal y la de tu familia con atención preventiva y tratamientos generales, explicando cada paso para que te sientas tranquilo en el sillón.",
+      "queAtiende": [
+        "Evaluación odontológica y plan de tratamiento",
+        "Limpieza y profilaxis",
+        "Tratamientos generales (obturaciones o tapaduras)",
+        "Atención odontológica para niños y niñas",
+        "Educación en higiene bucal"
+      ],
+      "primeraConsulta": "Revisamos tu boca de forma completa, conversamos sobre tus hábitos y te entregamos un plan de tratamiento con su presupuesto antes de comenzar cualquier procedimiento.",
+      "duracion": 45,
+      "valor": 30000,
+      "valorNota": "evaluación"
+    },
+    {
+      "slug": "nutricion",
+      "nombre": "Nutrición",
+      "icono": "manzana",
+      "imagen": "especialidad-nutricion",
+      "descripcionBreve": "Planes de alimentación y educación nutricional.",
+      "descripcion": "Construimos contigo una alimentación posible y sostenible, adaptada a tu rutina y tus gustos, sin dietas extremas.",
+      "queAtiende": [
+        "Planes de alimentación personalizados",
+        "Educación nutricional y lectura de etiquetas",
+        "Acompañamiento en cambios de hábitos",
+        "Alimentación para personas que practican deporte",
+        "Controles de seguimiento"
+      ],
+      "primeraConsulta": "Conversamos sobre tu rutina, tus hábitos y tus objetivos, tomamos medidas básicas y te entregamos recomendaciones iniciales. El plan detallado se ajusta en los controles.",
+      "duracion": 45,
+      "valor": 30000,
+      "valorNota": "consulta"
+    },
+    {
+      "slug": "psicologia",
+      "nombre": "Psicología",
+      "icono": "conversacion",
+      "imagen": "especialidad-psicologia",
+      "descripcionBreve": "Psicoterapia para adolescentes y adultos.",
+      "descripcion": "Un espacio seguro y confidencial para conversar sobre lo que te preocupa y desarrollar herramientas para tu bienestar.",
+      "queAtiende": [
+        "Psicoterapia individual para adolescentes (desde 14 años) y adultos",
+        "Manejo del estrés y la ansiedad cotidiana",
+        "Procesos de cambio y adaptación",
+        "Orientación en relaciones y vínculos",
+        "Acompañamiento en duelos"
+      ],
+      "primeraConsulta": "Es una sesión de acogida: conversamos sobre lo que te trae a consulta, resolvemos tus dudas sobre el proceso y acordamos juntos la frecuencia de las sesiones.",
+      "duracion": 50,
+      "valor": 38000,
+      "valorNota": "sesión"
+    },
+    {
+      "slug": "enfermeria",
+      "nombre": "Enfermería",
+      "icono": "curita",
+      "imagen": "especialidad-enfermeria",
+      "descripcionBreve": "Curaciones, toma de presión y procedimientos simples.",
+      "descripcion": "Procedimientos de enfermería rápidos y seguros, realizados por profesionales que te explican cada paso.",
+      "queAtiende": [
+        "Curaciones simples",
+        "Toma de presión arterial y controles",
+        "Administración de medicamentos inyectables con receta",
+        "Retiro de puntos",
+        "Educación en autocuidado"
+      ],
+      "primeraConsulta": "Te recibimos, revisamos la indicación o receta si corresponde y realizamos el procedimiento. Trae tu cédula de identidad y, si aplica, la receta o indicación médica.",
+      "duracion": 20,
+      "valor": 15000,
+      "valorNota": "procedimiento"
+    }
+  ],
+
+  "equipo": [
+    {
+      "id": "camila-fuentes",
+      "nombre": "Dra. Camila Fuentes",
+      "nombreCorto": "Dra. Fuentes",
+      "titulo": "Médica cirujana",
+      "especialidad": "medicina-general",
+      "dias": [1, 2, 3, 4, 5],
+      "enfoque": "Cree en una medicina general cercana y sin apuro: escuchar primero, explicar con palabras simples y acordar con cada paciente los pasos a seguir.",
+      "imagen": "equipo-camila-fuentes"
+    },
+    {
+      "id": "matias-rivas",
+      "nombre": "Klgo. Matías Rivas",
+      "nombreCorto": "Klgo. Rivas",
+      "titulo": "Kinesiólogo",
+      "especialidad": "kinesiologia",
+      "dias": [1, 3, 5],
+      "enfoque": "Trabaja con ejercicio terapéutico y educación para que cada persona entienda su cuerpo y recupere su autonomía en las actividades del día a día.",
+      "imagen": "equipo-matias-rivas"
+    },
+    {
+      "id": "javiera-soto",
+      "nombre": "Dra. Javiera Soto",
+      "nombreCorto": "Dra. Soto",
+      "titulo": "Cirujana dentista",
+      "especialidad": "odontologia",
+      "dias": [2, 4, 6],
+      "enfoque": "Su prioridad es que ir al dentista deje de ser una experiencia temida: explica cada procedimiento y pone especial atención en la prevención y en los más pequeños.",
+      "imagen": "equipo-javiera-soto"
+    },
+    {
+      "id": "fernanda-lagos",
+      "nombre": "Nta. Fernanda Lagos",
+      "nombreCorto": "Nta. Lagos",
+      "titulo": "Nutricionista",
+      "especialidad": "nutricion",
+      "dias": [1, 4],
+      "enfoque": "Propone cambios graduales y realistas, adaptados a la rutina, el presupuesto y los gustos de cada persona, sin prohibiciones extremas.",
+      "imagen": "equipo-fernanda-lagos"
+    },
+    {
+      "id": "tomas-herrera",
+      "nombre": "Ps. Tomás Herrera",
+      "nombreCorto": "Ps. Herrera",
+      "titulo": "Psicólogo clínico",
+      "especialidad": "psicologia",
+      "dias": [2, 5],
+      "enfoque": "Acompaña a adolescentes y adultos desde un enfoque cálido y colaborativo, en un espacio de confianza donde cada persona marca su propio ritmo.",
+      "imagen": "equipo-tomas-herrera"
+    },
+    {
+      "id": "valentina-mora",
+      "nombre": "EU. Valentina Mora",
+      "nombreCorto": "EU. Mora",
+      "titulo": "Enfermera universitaria",
+      "especialidad": "enfermeria",
+      "dias": [1, 2, 3, 4, 5, 6],
+      "enfoque": "Realiza cada procedimiento con calma y prolijidad, y aprovecha cada atención para enseñar herramientas simples de autocuidado.",
+      "imagen": "equipo-valentina-mora"
+    }
+  ],
+
+  "preguntasFrecuentes": [
+    {
+      "id": "horario",
+      "pregunta": "¿Cuál es el horario de atención?",
+      "respuesta": "Atendemos {horario}. Domingos y festivos el centro permanece cerrado. La reserva en línea está disponible las 24 horas en {sitio}/agendar."
+    },
+    {
+      "id": "ubicacion",
+      "pregunta": "¿Dónde están ubicados y hay estacionamiento?",
+      "respuesta": "Estamos en {direccion}. {estacionamiento} {accesibilidad}"
+    },
+    {
+      "id": "agendar",
+      "pregunta": "¿Cómo puedo agendar una hora?",
+      "respuesta": "Puedes agendar en línea en {sitio}/agendar eligiendo especialidad, profesional, día y hora. También puedes escribirnos por WhatsApp al {whatsapp} o llamar al {telefono} en horario de atención."
+    },
+    {
+      "id": "cancelar",
+      "pregunta": "¿Cómo cancelo o reprogramo mi hora?",
+      "respuesta": "Escríbenos por WhatsApp al {whatsapp} o llama al {telefono} indicando tu código de reserva, idealmente con al menos {anticipacion} de anticipación. Así podemos ofrecer ese horario a otra persona."
+    },
+    {
+      "id": "valores",
+      "pregunta": "¿Cuánto cuesta una consulta?",
+      "respuesta": "Depende de la especialidad: los valores referenciales van desde {valorMinimo} hasta {valorMaximo}. Revisa el detalle en {sitio}/valores. Son valores referenciales: confirma el valor final al agendar."
+    },
+    {
+      "id": "pagos",
+      "pregunta": "¿Qué medios de pago aceptan?",
+      "respuesta": "Aceptamos {mediosPago}. El pago se realiza en recepción el día de tu atención."
+    },
+    {
+      "id": "prevision",
+      "pregunta": "¿Atienden con isapre o Fonasa?",
+      "respuesta": "Nuestra atención es particular: no emitimos bonos ni tenemos convenios con instituciones específicas. Al pagar te entregamos una boleta para que solicites el reembolso en tu isapre o seguro complementario, según las condiciones de tu plan."
+    },
+    {
+      "id": "primera-consulta",
+      "pregunta": "¿Qué debo llevar a mi primera consulta?",
+      "respuesta": "Trae tu cédula de identidad y llega 10 minutos antes. Si tienes exámenes, informes o recetas previas relacionadas con tu consulta, tráelos. Las personas menores de edad deben venir con un adulto responsable."
+    },
+    {
+      "id": "urgencias",
+      "pregunta": "¿Atienden urgencias?",
+      "respuesta": "No. Si tienes una urgencia, llama al SAMU 131 o acude al servicio de urgencia más cercano. Este sitio y nuestro WhatsApp no atienden urgencias."
+    },
+    {
+      "id": "datos",
+      "pregunta": "¿Cómo protegen mis datos personales?",
+      "respuesta": "Usamos tus datos solo para gestionar tu atención, tu agenda y los recordatorios que autorices, conforme a la Ley 21.719 y la Ley 20.584. No los usamos para publicidad sin tu consentimiento. Puedes leer nuestra política en {sitio}/privacidad."
+    }
+  ]
+}

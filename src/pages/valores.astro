@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import Icono from '../components/Icono.astro';
+import { C } from '../lib/datos.js';
+import { unirLista } from '../lib/centro.js';
+
+const mayus = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+---
+<Base titulo="Valores" descripcion="Valores referenciales y ficticios de las prestaciones de Centro Demo, medios de pago e información para solicitar reembolso.">
+  <EncabezadoPagina
+    titulo="Valores y medios de pago"
+    bajada="Transparencia desde el principio: revisa la duración y el valor referencial de cada prestación antes de agendar."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="aviso aviso--info" style="margin-bottom: 24px">
+        <Icono nombre="info" />
+        <p><strong>{C.centro.notaValores}</strong> Todos los valores de este sitio son ficticios.</p>
+      </div>
+
+      <div class="tabla-envoltura" tabindex="0" role="region" aria-labelledby="tabla-titulo">
+        <table>
+          <caption id="tabla-titulo" class="visualmente-oculto">Prestaciones, duración y valor referencial</caption>
+          <thead>
+            <tr><th scope="col">Prestación</th><th scope="col">Especialidad</th><th scope="col">Duración</th><th scope="col">Valor referencial</th><th scope="col"><span class="visualmente-oculto">Acción</span></th></tr>
+          </thead>
+          <tbody>
+            {C.especialidades.map((e) => (
+              <tr>
+                <th scope="row" class="prestacion">{mayus(e.valorNota)} de {e.nombre.toLowerCase()}<span>{e.descripcionBreve}</span></th>
+                <td>{e.nombre}</td>
+                <td>{e.duracion} min</td>
+                <td class="num">{e.valorTexto}</td>
+                <td><a href={`/agendar?especialidad=${e.slug}`} class="enlace-flecha">Agendar <Icono nombre="flecha" tamano={16} /></a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grilla grilla--2 info-pago">
+        <div class="tarjeta info-pago__item">
+          <span class="info-pago__icono"><Icono nombre="tarjeta" /></span>
+          <h2>Medios de pago</h2>
+          <p>Aceptamos {unirLista(C.centro.mediosPago)}. El pago se realiza en recepción el día de tu atención.</p>
+          <ul class="medios">
+            {C.centro.mediosPago.map((m) => <li>{mayus(m)}</li>)}
+          </ul>
+        </div>
+        <div class="tarjeta info-pago__item">
+          <span class="info-pago__icono"><Icono nombre="billetera" /></span>
+          <h2>Previsión y reembolso</h2>
+          <p>{C.centro.prevision}</p>
+          <p class="nota">El monto del reembolso depende de las condiciones de tu plan. Consulta directamente con tu institución.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prestacion { text-transform: none; letter-spacing: 0; font-size: 1rem; color: var(--tinta); background: none; font-family: var(--fuente-titulos); }
+  .prestacion span { display: block; font-family: var(--fuente-texto); font-weight: 400; font-size: 0.875rem; color: var(--gris); margin-top: 2px; }
+  td .enlace-flecha { white-space: nowrap; }
+  .info-pago { margin-top: 40px; }
+  .info-pago__item { padding: 28px; }
+  .info-pago__item h2 { font-size: 1.35rem; }
+  .info-pago__icono { display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--verde-claro); color: var(--verde); margin-bottom: 14px; }
+  .medios { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .medios li { padding: 6px 14px; border-radius: 999px; background: var(--crema); border: 1px solid var(--borde); font-weight: 600; font-size: 0.9rem; }
+</style>

@@ -1,0 +1,40 @@
+---
+import Icono from './Icono.astro';
+import { C } from '../lib/datos.js';
+interface Props { cantidad?: number; nivelTitulo?: 'h2' | 'h3' }
+const { cantidad, nivelTitulo = 'h3' } = Astro.props;
+const Titulo = nivelTitulo;
+const preguntas = cantidad ? C.faq.slice(0, cantidad) : C.faq;
+
+// Convierte «sitio/ruta» dentro de la respuesta en un enlace interno.
+const patronSitio = new RegExp(`${C.sitioCorto.replace(/\./g, '\\.')}(/[a-z-]+)`, 'g');
+const conEnlaces = (t: string) =>
+  t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(patronSitio, (_, ruta) => `<a href="${ruta}">${C.sitioCorto}${ruta}</a>`);
+---
+<div class="faq">
+  {preguntas.map((f) => (
+    <details class="faq__item" id={`pregunta-${f.id}`} data-texto={`${f.pregunta} ${f.respuesta}`.toLowerCase()}>
+      <summary>
+        <Titulo class="faq__pregunta">{f.pregunta}</Titulo>
+        <Icono nombre="chevron-abajo" class="faq__chevron" />
+      </summary>
+      <p class="faq__respuesta" set:html={conEnlaces(f.respuesta)} />
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { display: grid; gap: 12px; }
+  .faq__item { background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra); border: 1px solid rgb(28 43 57 / 0.04); }
+  .faq__item[open] { box-shadow: var(--sombra-alta); }
+  summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 22px; border-radius: var(--radio);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover .faq__pregunta { color: var(--verde-oscuro); }
+  .faq__pregunta { font-size: 1.05rem; margin: 0; font-weight: 700; }
+  summary :global(.faq__chevron) { flex: none; color: var(--verde); transition: transform 0.2s ease; }
+  .faq__item[open] summary :global(.faq__chevron) { transform: rotate(180deg); }
+  .faq__respuesta { padding: 0 22px 20px; margin: 0; color: var(--gris); }
+</style>

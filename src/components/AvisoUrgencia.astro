@@ -1,0 +1,11 @@
+---
+import Icono from './Icono.astro';
+import { C } from '../lib/datos.js';
+interface Props { class?: string }
+const { class: clase = '' } = Astro.props;
+const [primera, ...resto] = C.centro.urgencias.split('. ');
+---
+<div class={`aviso aviso--urgencia ${clase}`} role="note" aria-label="Aviso de urgencias">
+  <Icono nombre="alerta" />
+  <p><strong>{primera}.</strong> {resto.join('. ')}</p>
+</div>

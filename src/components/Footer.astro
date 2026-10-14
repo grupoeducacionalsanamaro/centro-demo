@@ -1,0 +1,105 @@
+---
+import Logo from './Logo.astro';
+import Icono from './Icono.astro';
+import { C } from '../lib/datos.js';
+const anio = 2026;
+---
+<footer class="pie">
+  <div class="pie__urgencia">
+    <div class="contenedor pie__urgencia-interior">
+      <Icono nombre="alerta" />
+      <p>{C.centro.urgencias}</p>
+    </div>
+  </div>
+
+  <div class="contenedor pie__grilla">
+    <div class="pie__col pie__col--marca">
+      <Logo claro />
+      <p class="pie__eslogan">{C.centro.eslogan}</p>
+      <address>
+        <Icono nombre="ubicacion" tamano={18} />
+        <span>{C.direccionCompleta}<br /><small>({C.centro.direccion.nota})</small></span>
+      </address>
+    </div>
+
+    <div class="pie__col">
+      <h2 class="pie__titulo">Horarios</h2>
+      <dl class="pie__horario">
+        {C.horarioResumen.map((h) => (
+          <div><dt>{h.dias}</dt><dd>{h.horas}</dd></div>
+        ))}
+      </dl>
+    </div>
+
+    <div class="pie__col">
+      <h2 class="pie__titulo">Contacto</h2>
+      <ul class="pie__lista pie__lista--iconos">
+        <li><Icono nombre="telefono" tamano={18} /><a href={C.telLink}>{C.centro.telefono}</a></li>
+        <li><Icono nombre="whatsapp" tamano={18} /><a href={C.waLink(C.mensajeWhatsapp)} target="_blank" rel="noopener">WhatsApp {C.centro.whatsapp}</a></li>
+        <li><Icono nombre="correo" tamano={18} /><a href={`mailto:${C.centro.correo}`}>{C.centro.correo}</a></li>
+      </ul>
+      <p class="pie__nota">{C.centro.notaContacto}.</p>
+    </div>
+
+    <div class="pie__col">
+      <h2 class="pie__titulo">Enlaces rápidos</h2>
+      <ul class="pie__lista">
+        <li><a href="/agendar">Agendar hora</a></li>
+        <li><a href="/agendar#mis-reservas">Mis reservas</a></li>
+        <li><a href="/especialidades">Especialidades</a></li>
+        <li><a href="/equipo">Equipo</a></li>
+        <li><a href="/valores">Valores</a></li>
+        <li><a href="/educacion">Educación</a></li>
+        <li><a href="/preguntas-frecuentes">Preguntas frecuentes</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+        <li><a href="/privacidad">Política de privacidad</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pie__legal">
+    <div class="contenedor">
+      <p class="pie__ficticio"><Icono nombre="info" tamano={16} /> {C.centro.avisoFicticio}</p>
+      <p>© {anio} {C.centro.nombre} · Demostración creada para LEVEL UP 2026 · <a href="/privacidad">Privacidad</a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pie { background: var(--tinta); color: #c9d3db; font-size: 0.95rem; }
+  .pie a { color: #fff; text-decoration-color: rgb(255 255 255 / 0.35); }
+  .pie a:hover { color: #a9dccf; }
+  .pie :focus-visible { outline-color: #a9dccf; }
+
+  .pie__urgencia { background: var(--coral-claro); color: var(--tinta); }
+  .pie__urgencia-interior { display: flex; gap: 12px; align-items: center; padding-block: 14px; }
+  .pie__urgencia-interior :global(.icono) { color: var(--coral-oscuro); flex: none; }
+  .pie__urgencia p { margin: 0; }
+  .pie__urgencia strong { color: var(--coral-oscuro); }
+
+  .pie__grilla { display: grid; gap: 36px; padding-block: 56px 40px; }
+  @media (min-width: 640px) { .pie__grilla { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .pie__grilla { grid-template-columns: 1.4fr 1fr 1.2fr 1fr; } }
+
+  .pie__col--marca :global(.logo__nombre) { color: #fff; }
+  .pie__col--marca :global(.logo__bajada) { color: #a9dccf; }
+  .pie__eslogan { margin: 16px 0; color: #fff; font-family: var(--fuente-titulos); font-weight: 600; }
+  address { font-style: normal; display: flex; gap: 10px; }
+  address :global(.icono) { flex: none; margin-top: 3px; color: #a9dccf; }
+  small { color: #9fb0bd; }
+
+  .pie__titulo { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: #fff; margin-bottom: 16px; }
+  .pie__horario { margin: 0; display: grid; gap: 10px; }
+  .pie__horario dt { color: #fff; font-weight: 600; }
+  .pie__horario dd { margin: 0; }
+  .pie__lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .pie__lista--iconos li { display: flex; gap: 10px; align-items: center; }
+  .pie__lista--iconos :global(.icono) { color: #a9dccf; flex: none; }
+  .pie__nota { font-size: 0.85rem; color: #9fb0bd; margin-top: 12px; }
+
+  .pie__legal { border-top: 1px solid rgb(255 255 255 / 0.12); padding-block: 20px 96px; font-size: 0.85rem; color: #9fb0bd; }
+  @media (min-width: 768px) { .pie__legal { padding-bottom: 24px; } }
+  .pie__legal p { margin: 0 0 6px; }
+  .pie__ficticio { display: flex; gap: 8px; align-items: center; color: #dbe3e9; }
+  .pie__ficticio :global(.icono) { flex: none; }
+</style>

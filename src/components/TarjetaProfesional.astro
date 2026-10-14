@@ -1,0 +1,42 @@
+---
+import Icono from './Icono.astro';
+interface Props {
+  p: {
+    id: string; nombre: string; nombreCorto: string; titulo: string; especialidad: string;
+    especialidadNombre: string; diasTexto: string; enfoque: string; imagen: string;
+  };
+  completo?: boolean; // perfil completo (página Equipo) o versión compacta (Inicio)
+  nivelTitulo?: 'h2' | 'h3';
+}
+const { p, completo = false, nivelTitulo = 'h3' } = Astro.props;
+const Titulo = nivelTitulo;
+---
+<article class:list={['tarjeta', 'prof', { 'prof--completo': completo }]} id={completo ? p.id : undefined} data-especialidad={p.especialidad}>
+  <img class="prof__avatar" src={`/images/${p.imagen}.webp`} width="400" height="400" alt={`Avatar ilustrado de ${p.nombre}`} loading="lazy" decoding="async" />
+  <div class="prof__cuerpo">
+    <span class="etiqueta">{p.especialidadNombre}</span>
+    <Titulo class="prof__nombre">{p.nombre}</Titulo>
+    <p class="prof__titulo">{p.titulo}</p>
+    {completo && <p class="prof__enfoque">{p.enfoque}</p>}
+    <p class="prof__dias"><Icono nombre="calendario" tamano={18} /> <span><span class="visualmente-oculto">Días de atención: </span>{p.diasTexto}</span></p>
+    {completo && <p class="prof__registro">Registro profesional: dato ficticio</p>}
+    <a class="boton boton--secundario boton--chico prof__boton" href={`/agendar?especialidad=${p.especialidad}&profesional=${p.id}`}>
+      Agendar con {p.nombreCorto}
+    </a>
+  </div>
+</article>
+
+<style>
+  .prof { padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; }
+  .prof__avatar { width: 128px; height: 128px; border-radius: 50%; object-fit: cover; background: var(--verde-claro); margin-bottom: 16px; }
+  .prof--completo .prof__avatar { width: 152px; height: 152px; }
+  .prof__cuerpo { display: flex; flex-direction: column; align-items: center; flex: 1; width: 100%; }
+  .prof__cuerpo :global(.etiqueta) { align-self: center; }
+  .prof__nombre { font-size: 1.2rem; margin: 12px 0 2px; }
+  .prof__titulo { color: var(--gris); margin-bottom: 12px; font-size: 0.95rem; }
+  .prof__enfoque { font-size: 0.95rem; margin-bottom: 14px; }
+  .prof__dias { display: inline-flex; gap: 8px; align-items: center; font-weight: 600; font-size: 0.92rem; color: var(--verde-oscuro); margin-bottom: 8px; }
+  .prof__registro { font-size: 0.8rem; color: var(--gris); margin-bottom: 0; }
+  .prof__boton { margin-top: auto; width: 100%; }
+  .prof__registro + .prof__boton, .prof__dias + .prof__boton { margin-top: 16px; }
+</style>

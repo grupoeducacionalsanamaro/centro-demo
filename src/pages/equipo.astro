@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import TarjetaProfesional from '../components/TarjetaProfesional.astro';
+import { C } from '../lib/datos.js';
+---
+<Base titulo="Equipo" descripcion="Conoce al equipo ficticio de Centro Demo: medicina general, kinesiología, odontología, nutrición, psicología y enfermería, con sus días de atención.">
+  <EncabezadoPagina
+    titulo="Nuestro equipo"
+    bajada="Profesionales de distintas especialidades que trabajan coordinados para acompañarte. Conoce su enfoque y sus días de atención."
+    imagen="equipo-grupal"
+    imagenAlt="Ilustración del equipo del centro: seis profesionales de la salud de pie, sonriendo."
+  />
+
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="filtros" role="group" aria-label="Filtrar por especialidad" data-filtro-grupo data-items=".grilla-equipo [data-especialidad]" data-estado="estado-equipo">
+        <button type="button" class="chip" data-filtro="todas" aria-pressed="true">Todas</button>
+        {C.especialidades.map((e) => (
+          <button type="button" class="chip" data-filtro={e.slug} aria-pressed="false">{e.nombre}</button>
+        ))}
+      </div>
+      <p id="estado-equipo" class="visualmente-oculto" aria-live="polite"></p>
+      <ul class="lista-grilla grilla grilla--equipo grilla-equipo">
+        {C.equipo.map((p) => <li><TarjetaProfesional p={p} completo nivelTitulo="h2" /></li>)}
+      </ul>
+      <p class="nota" style="margin-top: 28px">
+        Equipo ficticio. Los nombres, avatares y datos profesionales son inventados con fines demostrativos.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { iniciarFiltro } from '../scripts/filtro';
+  document.querySelectorAll<HTMLElement>('[data-filtro-grupo]').forEach(iniciarFiltro);
+</script>

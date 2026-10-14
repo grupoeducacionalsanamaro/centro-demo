@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import EncabezadoPagina from '../components/EncabezadoPagina.astro';
+import ListaPreguntas from '../components/ListaPreguntas.astro';
+import Icono from '../components/Icono.astro';
+import { C } from '../lib/datos.js';
+
+// Texto plano para el botón «Copiar todas las respuestas» (base del asistente de WhatsApp).
+const textoPlano = [
+  `Preguntas frecuentes — ${C.centro.nombre}`,
+  '',
+  ...C.faq.flatMap((f, i) => [`${i + 1}. ${f.pregunta}`, f.respuesta, '']),
+].join('\n').trim();
+---
+<Base titulo="Preguntas frecuentes" descripcion="Horarios, ubicación, reservas, valores, medios de pago, previsión y protección de datos en Centro Demo (sitio ficticio).">
+  <EncabezadoPagina
+    titulo="Preguntas frecuentes"
+    bajada="Encuentra respuestas rápidas sobre horarios, reservas, valores y más. Si no encuentras lo que buscas, escríbenos."
+    imagen="preguntas-frecuentes"
+    imagenAlt="Ilustración de una persona leyendo en su tableta junto a burbujas con un signo de pregunta y un ticket."
+  />
+
+  <section class="seccion">
+    <div class="contenedor contenedor--angosto">
+      <div class="faq-herramientas">
+        <div class="buscador">
+          <label for="buscar-faq" class="visualmente-oculto">Buscar en las preguntas frecuentes</label>
+          <Icono nombre="buscar" tamano={20} />
+          <input id="buscar-faq" class="entrada" type="search" placeholder="Buscar: horario, pago, isapre…" autocomplete="off" />
+        </div>
+        <button type="button" class="boton boton--secundario" id="copiar-faq">
+          <Icono nombre="copiar" tamano={20} /> <span>Copiar todas las respuestas</span>
+        </button>
+      </div>
+      <p id="estado-faq" class="faq-estado" aria-live="polite"></p>
+
+      <ListaPreguntas nivelTitulo="h2" />
+      <p class="faq-vacio" id="faq-vacio" hidden>No encontramos preguntas con ese término. Prueba con otra palabra o <a href="/contacto">escríbenos</a>.</p>
+
+      <div class="tarjeta faq-contacto">
+        <div>
+          <h2>¿Tienes otra pregunta?</h2>
+          <p>Escríbenos por WhatsApp o llámanos en horario de atención.</p>
+        </div>
+        <a class="boton boton--primario" href={C.waLink(C.mensajeWhatsapp)} target="_blank" rel="noopener"><Icono nombre="whatsapp" tamano={20} /> Escríbenos</a>
+      </div>
+    </div>
+  </section>
+
+  <template id="faq-texto-plano">{textoPlano}</template>
+</Base>
+
+<script>
+  const input = document.getElementById('buscar-faq') as HTMLInputElement;
+  const items = document.querySelectorAll<HTMLDetailsElement>('.faq__item');
+  const vacio = document.getElementById('faq-vacio')!;
+  const estado = document.getElementById('estado-faq')!;
+  const normalizar = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  input.addEventListener('input', () => {
+    const q = normalizar(input.value.trim());
+    let visibles = 0;
+    items.forEach((d) => {
+      const coincide = !q || normalizar(d.dataset.texto ?? '').includes(q);
+      d.hidden = !coincide;
+      if (coincide) visibles++;
+      if (q && coincide && visibles <= 3) d.open = true;
+      if (!q) d.open = false;
+    });
+    vacio.hidden = visibles > 0;
+    estado.textContent = q ? `${visibles} ${visibles === 1 ? 'pregunta encontrada' : 'preguntas encontradas'}` : '';
+  });
+
+  // Abre la pregunta enlazada directamente (#pregunta-…)
+  if (location.hash.startsWith('#pregunta-')) {
+    const d = document.querySelector<HTMLDetailsElement>(location.hash);
+    if (d) d.open = true;
+  }
+
+  const boton = document.getElementById('copiar-faq')!;
+  const etiqueta = boton.querySelector('span')!;
+  const texto = (document.getElementById('faq-texto-plano') as HTMLTemplateElement).content.textContent ?? '';
+  boton.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(texto);
+    } catch {
+      // Alternativa para navegadores sin permiso de portapapeles
+      const area = document.createElement('textarea');
+      area.value = texto;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.append(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    etiqueta.textContent = '¡Copiadas! (10 preguntas)';
+    estado.textContent = 'Se copiaron las 10 preguntas y respuestas al portapapeles.';
+    setTimeout(() => (etiqueta.textContent = 'Copiar todas las respuestas'), 2500);
+  });
+</script>
+
+<style>
+  .faq-herramientas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; }
+  .buscador { position: relative; flex: 1 1 280px; }
+  .buscador :global(.icono) { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gris); pointer-events: none; }
+  .buscador .entrada { padding-left: 44px; }
+  .faq-herramientas .boton { flex: 0 0 auto; }
+  @media (max-width: 479px) { .faq-herramientas .boton { width: 100%; } }
+  .faq-estado { min-height: 1.5em; font-size: 0.9rem; color: var(--gris); margin-bottom: 8px; }
+  .faq-vacio { text-align: center; padding: 24px; color: var(--gris); }
+  .faq-contacto { margin-top: 40px; padding: 24px 28px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+  .faq-contacto h2 { font-size: 1.25rem; margin-bottom: 4px; }
+  .faq-contacto p { margin: 0; color: var(--gris); }
+</style>
